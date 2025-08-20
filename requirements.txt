@@ -1,0 +1,10 @@
+Create a software that satisfies the following requirements:
+
+1. This software allows you to play tic-tac-toe with you favorite Uma Musume 
+2. User should be able to select Uma Musume from a list
+3. After selecting Uma Musume, the user can play tic-tac-toe against the selected Uma Musume
+4. User can view their moves history while playing 
+5. After completing, users can view the game result as well as every single move they have made 
+6. After winnning, user can view the Uma Musume reaction, select another Uma Musume, or play again with the same Uma Musume
+7. After losing, user can select another Uma Musume or play again with the same Uma Musume
+8. If draw, user can select another Uma Musume or play again with the same Uma Musume

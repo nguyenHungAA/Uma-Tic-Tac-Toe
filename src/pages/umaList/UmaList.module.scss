@@ -1,0 +1,218 @@
+.uma-list-page {
+    min-height: 100vh;
+    padding: 2rem;
+    color: white;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.title {
+    font-size: 2.5rem;
+    font-weight: 300;
+    margin-bottom: 2rem;
+    color: #e2e8f0;
+    letter-spacing: 0.5px;
+}
+
+.search-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+
+    @media (min-width: 768px) {
+        flex-direction: row;
+        justify-content: center;
+        gap: 2rem;
+    }
+}
+
+.search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    max-width: 500px;
+    width: 100%;
+}
+
+.search-input {
+    width: 100%;
+    padding: 12px 50px 12px 20px;
+    border: none;
+    border-radius: 25px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    color: white;
+    font-size: 16px;
+    outline: none;
+    transition: all 0.3s ease;
+
+    &::placeholder {
+        color: rgba(255, 255, 255, 0.6);
+    }
+
+    &:focus {
+        background: rgba(255, 255, 255, 0.15);
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+    }
+}
+
+.search-button {
+    position: absolute;
+    right: 0;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 18px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+
+    &:hover {
+        color: white;
+    }
+}
+
+.difficulty-filter {
+    padding: 12px 10px;
+    border: none;
+    border-radius: 25px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    color: white;
+    font-size: 16px;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:focus {
+        background: rgba(255, 255, 255, 0.15);
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+    }
+
+    option {
+        background: #2d3748;
+        color: white;
+    }
+}
+
+
+.uma-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+
+    @media (min-width: 768px) {
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    }
+}
+
+.uma-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    cursor: pointer;
+
+    &:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+}
+
+.card-image {
+    width: 100%;
+    height: 300px;
+    overflow: hidden;
+    position: relative;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    &:hover img {
+        transform: scale(1.05);
+    }
+}
+
+.card-content {
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.uma-name {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #f7fafc;
+}
+
+.uma-location {
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+}
+
+.play-button {
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 12px 30px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    max-width: 200px;
+
+    &:hover {
+        background: linear-gradient(135deg, #4338ca 0%, #6d28d9 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(79, 70, 229, 0.3);
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+}
+
+.no-results {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 3rem;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 1.2rem;
+}
+
+// Responsive design
+@media (max-width: 768px) {
+    .uma-list-page {
+        padding: 1rem;
+    }
+
+    .title {
+        font-size: 2rem;
+    }
+
+    .uma-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .card-image {
+        height: 250px;
+    }
+}
