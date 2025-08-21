@@ -1,5 +1,5 @@
 import classNames from "classnames/bind";
-import styles from './button.module.scss';
+import styles from './Button.module.scss';
 
 interface ButtonProps {
     label: string;

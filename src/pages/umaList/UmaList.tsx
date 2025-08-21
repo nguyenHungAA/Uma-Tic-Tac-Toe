@@ -1,11 +1,13 @@
 import { Search } from "lucide-react";
-import type { Uma } from "../../types/Uma";
-import { data } from "../../data/sampleUmaData";
 import { useState, useMemo } from "react";
 import classNames from "classnames/bind";
-import styles from './UmaList.module.scss';
-import UmaCard from "../../component/umaCard/UmaCard";
 import { useNavigate } from "react-router";
+
+import styles from './UmaList.module.scss';
+import type { Uma } from "@/types/Uma";
+import { data } from "@/data/sampleUmaData";
+import UmaCard from "@/component/umaCard/UmaCard";
+import SearchBar from "@/component/search/SearchBar";
 
 function UmaList() {
     const [searchTerm, setSearchTerm] = useState('');
@@ -31,16 +33,16 @@ function UmaList() {
         <div className={cx('uma-list-page')}>
             <div className={cx('header')}>
                 <h1 className={cx('title')}>Pick your favorite uma musume</h1>
-
                 <div className={cx('search-section')}>
                     <div className={cx('search-container')}>
-                        <input
+                        <SearchBar
                             type="text"
                             placeholder="Search uma musume..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             className={cx('search-input')}
                         />
+
                         <button className={cx('search-button')}>
                             <Search />
                         </button>

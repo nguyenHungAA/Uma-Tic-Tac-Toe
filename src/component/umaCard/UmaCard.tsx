@@ -1,5 +1,5 @@
 import classNames from "classnames/bind";
-import styles from './umaCard.module.scss';
+import styles from './UmaCard.module.scss';
 import Button from "../button/Button";
 
 interface UmaCardProps {
