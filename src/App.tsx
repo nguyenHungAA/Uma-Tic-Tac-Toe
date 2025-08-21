@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router'
 import './App.css'
-import Game from './component/Game'
+import Game from './component/game/Game';
 import Home from './pages/home/HomePage';
 import UmaList from './pages/umaList/UmaList';
 function App() {

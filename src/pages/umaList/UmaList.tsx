@@ -4,11 +4,15 @@ import { data } from "../../data/sampleUmaData";
 import { useState, useMemo } from "react";
 import classNames from "classnames/bind";
 import styles from './UmaList.module.scss';
+import UmaCard from "../../component/umaCard/UmaCard";
+import { useNavigate } from "react-router";
 
 function UmaList() {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedDifficulty, setSelectedDifficulty] = useState('All');
     const cx = classNames.bind(styles);
+
+    const navigate = useNavigate();
 
     const difficulties = useMemo(() => {
         const uniqueDifficulties = [...new Set(data.map(uma => uma.difficulty))];
@@ -63,18 +67,14 @@ function UmaList() {
             <div className={cx('uma-grid')}>
                 {filteredUma.length > 0 ? (
                     filteredUma.map((uma: Uma) => (
-                        <div key={uma.id} className={cx('uma-card')}>
-                            <div className={cx('card-image')}>
-                                <img src={uma.avatar} alt={uma.name} />
-                            </div>
-                            <div className={cx('card-content')}>
-                                <h3 className={cx('uma-name')}>{uma.name}</h3>
-                                <p className={cx('uma-location')}>{uma.difficulty} • Training Center</p>
-                                <button className={cx('play-button')}>
-                                    Play now
-                                </button>
-                            </div>
-                        </div>
+                        <UmaCard
+                            key={uma.id}
+                            id={uma.id}
+                            name={uma.name}
+                            avatar={uma.avatar}
+                            difficulty={uma.difficulty}
+                            onClick={() => navigate(`/uma/${uma.id}`)}
+                        />
                     ))
                 ) : (
                     <div className={cx('no-results')}>
