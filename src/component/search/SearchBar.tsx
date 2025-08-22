@@ -18,7 +18,7 @@ function SearchBar({ type = "text", placeholder, value, onChange, className }: S
     const cx = classNames.bind(styles);
 
     return (
-        <div className={cx('search-container')}>
+        <div className={`${cx('input-container')} ${className || ''}`}>
             <input
                 type={type}
                 placeholder={placeholder}

@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router";
 import classNames from "classnames/bind";
 import styles from './homePage.module.scss';
-import Button from "../../component/button/Button";
+import Button from "@/component/button/Button";
 
 function HomePage() {
     const navigate = useNavigate();

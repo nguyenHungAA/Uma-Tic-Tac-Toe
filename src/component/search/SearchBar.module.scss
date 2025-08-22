@@ -1,5 +1,13 @@
-.search-input {
+.input-container {
+    position: relative;
     width: 100%;
+    display: flex;
+    align-items: center;
+    flex: 1;
+}
+
+.search-input {
+    flex: 1;
     padding: 12px 50px 12px 20px;
     border: none;
     border-radius: 25px;

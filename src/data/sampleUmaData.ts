@@ -1,4 +1,4 @@
-import type { Uma } from "../types/Uma"
+import type { Uma } from "@/types/Uma"
 
 export const data: Uma[] = [
     {
