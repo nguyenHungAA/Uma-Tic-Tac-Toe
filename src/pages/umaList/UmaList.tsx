@@ -12,24 +12,35 @@ import UmaListSkeleton from "./UmaListSkeleton";
 
 function UmaList() {
     const [searchTerm, setSearchTerm] = useState('');
+    const [activeSearchTerm, setActiveSearchTerm] = useState('');
     const [selectedDifficulty, setSelectedDifficulty] = useState('All');
     const cx = classNames.bind(styles);
 
     const navigate = useNavigate();
-    const { data: umaData, error, isLoading } = useUma();
+    const { error, isLoading } = useUma();
 
     const difficulties = useMemo(() => {
-        const uniqueDifficulties = [...new Set(data.map(uma => uma.difficulty))];
+        const uniqueDifficulties = [...new Set(data?.map(uma => uma.difficulty))];
         return ['All', ...uniqueDifficulties];
     }, []);
 
     const filteredUma = useMemo(() => {
-        return data.filter(uma => {
-            const matchesSearch = uma.name.toLowerCase().startsWith(searchTerm.toLowerCase());
+        return data?.filter(uma => {
+            const matchesSearch = uma.name.toLowerCase().startsWith(activeSearchTerm.toLowerCase());
             const matchesDifficulty = selectedDifficulty === 'All' || uma.difficulty === selectedDifficulty;
             return matchesSearch && matchesDifficulty;
         });
-    }, [searchTerm, selectedDifficulty]);
+    }, [activeSearchTerm, selectedDifficulty]);
+
+    const handleSearch = () => {
+        setActiveSearchTerm(searchTerm);
+    }
+
+    const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            handleSearch();
+        }
+    }
 
     if (isLoading) {
         return <UmaListSkeleton />;
@@ -49,6 +60,7 @@ function UmaList() {
                             type="text"
                             placeholder="Search uma musume..."
                             value={searchTerm}
+                            onKeyDown={handleSearchKeyDown}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             className={cx('search-input')}
                         />
@@ -73,8 +85,8 @@ function UmaList() {
             </div>
 
             <div className={cx('uma-grid')}>
-                {filteredUma.length > 0 ? (
-                    filteredUma.map((uma: Uma) => (
+                {filteredUma && filteredUma?.length > 0 ? (
+                    filteredUma?.map((uma: Uma) => (
                         <UmaCard
                             key={uma.id}
                             id={uma.id}
@@ -93,5 +105,6 @@ function UmaList() {
         </div>
     );
 }
+
 
 export default UmaList;

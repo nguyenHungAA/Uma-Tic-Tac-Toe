@@ -9,11 +9,12 @@ interface SearchBarProps {
     type?: string;
     placeholder: string;
     value: string;
+    onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
     className?: string;
 }
 
-function SearchBar({ type = "text", placeholder, value, onChange, className }: SearchBarProps) {
+function SearchBar({ type = "text", placeholder, value, onChange, onKeyDown, className }: SearchBarProps) {
 
     const cx = classNames.bind(styles);
 
@@ -23,6 +24,7 @@ function SearchBar({ type = "text", placeholder, value, onChange, className }: S
                 type={type}
                 placeholder={placeholder}
                 value={value}
+                onKeyDown={onKeyDown}
                 onChange={onChange}
                 className={`${cx('search-input')} ${className || ''}`}
             />

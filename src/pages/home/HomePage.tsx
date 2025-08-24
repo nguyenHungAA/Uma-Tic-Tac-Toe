@@ -2,6 +2,7 @@ import { useNavigate } from "react-router";
 import classNames from "classnames/bind";
 import styles from './homePage.module.scss';
 import Button from "@/component/button/Button";
+import { useEffect } from "react";
 
 function HomePage() {
     const navigate = useNavigate();
@@ -12,6 +13,12 @@ function HomePage() {
             <div key={i} className={cx('star')}></div>
         ));
     }
+
+    useEffect(() => {
+        fetch('https://tic-tac-toe-backend-beta.vercel.app/')
+            .then(response => response.json())
+            .then(data => console.log(data))
+    }, [])
 
     return (
         <div className={cx('home-container')}>
