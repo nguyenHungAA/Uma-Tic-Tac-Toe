@@ -1,6 +1,7 @@
 import classNames from "classnames/bind";
 import styles from './UmaCard.module.scss';
 import Button from "@/component/button/Button";
+import { useNavigate } from "react-router";
 
 interface UmaCardProps {
     id: string;
@@ -15,7 +16,7 @@ interface UmaCardProps {
 
 function UmaCard({ id, name, avatar, difficulty, onClick, disabled }: UmaCardProps) {
     const cx = classNames.bind(styles);
-
+    const navigate = useNavigate();
     return (
         <div key={id} className={cx('uma-card')}>
             <div className={cx('card-image')}>
@@ -27,7 +28,7 @@ function UmaCard({ id, name, avatar, difficulty, onClick, disabled }: UmaCardPro
                 <div className={cx('button-container')}>
                     <Button
                         className={cx('cta-button')}
-                        onClick={onClick}
+                        onClick={() => navigate(`/profile/${id}`)}
                         disabled={disabled}
                         label="View profile"
                     >
