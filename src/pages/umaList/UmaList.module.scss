@@ -1,6 +1,6 @@
 .uma-list-page {
     min-height: 100vh;
-    padding: 2rem;
+    padding: 0 2rem 2rem 2rem;
     color: white;
 }
 
@@ -91,7 +91,7 @@
     }
 
     @media (min-width: 1200px) {
-        grid-template-columns: repeat(auto-fit, minmax(320px, 360px));
+        grid-template-columns: repeat(3, minmax(320px, 360px));
         gap: 1.5rem;
     }
 }

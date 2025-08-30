@@ -93,7 +93,7 @@ function UmaList() {
                             name={uma.name}
                             avatar={uma.avatar}
                             difficulty={uma.difficulty}
-                            onClick={() => navigate(`/uma/${uma.id}`)}
+                            onClick={() => navigate(`/game`)}
                         />
                     ))
                 ) : (

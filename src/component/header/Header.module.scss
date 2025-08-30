@@ -9,7 +9,11 @@
 }
 
 .header-title {
-    width: 40%;
+    width: 30%;
+
+    .header-link {
+        color: white;
+    }
 }
 
 .header-nav {
@@ -19,7 +23,27 @@
 
     .nav-list {
         display: flex;
+        align-items: center;
         width: 100%;
         justify-content: space-evenly;
+
+        .nav-link {
+            color: white;
+
+            &:hover {
+                color: lightgray;
+            }
+        }
+
+        .nav-auth {
+            display: flex;
+            gap: 1rem;
+
+            .nav-link-btn {
+                min-width: 100px;
+                padding: 12px 24px;
+                border-radius: 6px;
+            }
+        }
     }
 }
