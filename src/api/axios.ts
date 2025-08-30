@@ -6,7 +6,7 @@ function sleep(ms: number) {
 }
 
 export async function getUma(): Promise<Uma[]> {
-    await sleep(3000)
+    await sleep(1500)
     const response = await axios.get<Uma[]>('/api/uma');
     return response.data;
 }

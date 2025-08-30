@@ -1,0 +1,25 @@
+.header {
+    position: sticky;
+
+}
+
+.header-container {
+    display: flex;
+    align-items: center;
+}
+
+.header-title {
+    width: 40%;
+}
+
+.header-nav {
+    display: flex;
+    flex: 1;
+    margin: auto;
+
+    .nav-list {
+        display: flex;
+        width: 100%;
+        justify-content: space-evenly;
+    }
+}

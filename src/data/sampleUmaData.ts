@@ -4,6 +4,7 @@ export const data: Uma[] = [
     {
         id: "uma1",
         name: "Manhattan Cafe",
+        title: "The Weird Ass",
         avatar: "https://pub-362e04190c3d4dd2b44146c65e89f2a1.r2.dev/joke.jpg",
         description: "A gentle and caring uma musume who loves to help others.",
         difficulty: "Easy",
@@ -13,6 +14,7 @@ export const data: Uma[] = [
     {
         id: "uma2",
         name: "Agnes Digital",
+        title: "The Gooner",
         avatar: "https://pub-362e04190c3d4dd2b44146c65e89f2a1.r2.dev/joke.jpg",
         description: "A tech-savvy uma musume with incredible digital skills.",
         difficulty: "Medium",
@@ -22,6 +24,7 @@ export const data: Uma[] = [
     {
         id: "uma3",
         name: "Agnes Tachyon",
+        title: "Tach-nician",
         avatar: "https://pub-362e04190c3d4dd2b44146c65e89f2a1.r2.dev/joke.jpg",
         description: "A brilliant scientist uma musume who loves experiments.",
         difficulty: "Hard",
@@ -31,6 +34,7 @@ export const data: Uma[] = [
     {
         id: "uma4",
         name: "Special Week",
+        title: "The commander of Japan",
         avatar: "https://pub-362e04190c3d4dd2b44146c65e89f2a1.r2.dev/joke.jpg",
         description: "An energetic uma musume who never gives up on her dreams.",
         difficulty: "Easy",
@@ -40,6 +44,7 @@ export const data: Uma[] = [
     {
         id: "uma5",
         name: "Silence Suzuka",
+        title: "Death Silence",
         avatar: "https://pub-362e04190c3d4dd2b44146c65e89f2a1.r2.dev/joke.jpg",
         description: "A quiet but powerful uma musume with incredible speed.",
         difficulty: "Medium",
@@ -49,6 +54,7 @@ export const data: Uma[] = [
     {
         id: "uma6",
         name: "Tokai Teio",
+        title: "Teio Step",
         avatar: "https://pub-362e04190c3d4dd2b44146c65e89f2a1.r2.dev/joke.jpg",
         description: "A royal uma musume with natural leadership qualities.",
         difficulty: "Hard",

@@ -56,6 +56,16 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+li {
+  list-style: none;
+}
+
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;

@@ -1,7 +1,10 @@
 import { useState } from 'react';
-import Board from "./Board";
+import Board from "../../component/board/Board";
+import classNames from 'classnames/bind';
+import style from './Game.module.scss'
 function Game() {
 
+    const cx = classNames.bind(style);
     const [history, setHistory] = useState([Array(9).fill(null)]);
     const [currentMove, setCurrentMove] = useState(0);
     const currentSquares = history[currentMove];
@@ -32,11 +35,11 @@ function Game() {
     })
 
     return (
-        <div className="game">
-            <div className="game-board">
+        <div className={cx('game')}>
+            <div className={cx('game-board')}>
                 <Board isXNext={isXNext} squares={currentSquares} onPlay={handlePlay} />
             </div>
-            <div className="game-info">
+            <div className={cx('game-info')}>
                 <ol>
                     {moves}
                 </ol>
