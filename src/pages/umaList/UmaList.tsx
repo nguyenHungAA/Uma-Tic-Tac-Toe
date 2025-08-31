@@ -25,7 +25,7 @@ function UmaList() {
     }, [data]);
 
     const filteredUma = useMemo(() => {
-        return data.data.filter(uma => {
+        return data?.data.filter(uma => {
             const matchesSearch = uma.name.toLowerCase().startsWith(activeSearchTerm.toLowerCase());
             const matchesDifficulty = selectedDifficulty === 'All' || uma.difficulty === selectedDifficulty;
             return matchesSearch && matchesDifficulty;
