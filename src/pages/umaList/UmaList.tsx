@@ -4,7 +4,6 @@ import { useNavigate } from "react-router";
 
 import styles from './UmaList.module.scss';
 import type { Uma } from "@/types/Uma";
-import { data } from "@/data/sampleUmaData";
 import UmaCard from "@/component/umaCard/UmaCard";
 import SearchBar from "@/component/search/SearchBar";
 import { useUma } from "@/hooks/useUma";
@@ -17,20 +16,21 @@ function UmaList() {
     const cx = classNames.bind(styles);
 
     const navigate = useNavigate();
-    const { error, isLoading } = useUma();
+    const { data, error, isLoading } = useUma();
+
 
     const difficulties = useMemo(() => {
-        const uniqueDifficulties = [...new Set(data?.map(uma => uma.difficulty))];
+        const uniqueDifficulties = [...new Set(data?.data.map(uma => uma.difficulty))];
         return ['All', ...uniqueDifficulties];
-    }, []);
+    }, [data]);
 
     const filteredUma = useMemo(() => {
-        return data?.filter(uma => {
+        return data.data.filter(uma => {
             const matchesSearch = uma.name.toLowerCase().startsWith(activeSearchTerm.toLowerCase());
             const matchesDifficulty = selectedDifficulty === 'All' || uma.difficulty === selectedDifficulty;
             return matchesSearch && matchesDifficulty;
         });
-    }, [activeSearchTerm, selectedDifficulty]);
+    }, [activeSearchTerm, data, selectedDifficulty]);
 
     const handleSearch = () => {
         setActiveSearchTerm(searchTerm);

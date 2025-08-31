@@ -11,13 +11,7 @@ function HomePage() {
         return Array.from({ length: 50 }, (_, i) => (
             <div key={i} className={cx('star')}></div>
         ));
-    }
-
-    // useEffect(() => {
-    //     fetch('https://tic-tac-toe-backend-beta.vercel.app/')
-    //         .then(response => response.json())
-    //         .then(data => console.log(data))
-    // }, [])
+    };
 
     return (
         <div className={cx('home-container')}>
