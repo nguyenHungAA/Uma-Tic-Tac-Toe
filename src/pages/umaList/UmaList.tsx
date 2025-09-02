@@ -20,14 +20,14 @@ function UmaList() {
 
 
     const difficulties = useMemo(() => {
-        const uniqueDifficulties = [...new Set(data?.data.map(uma => uma.difficulty))];
+        const uniqueDifficulties = [...new Set(data?.data.map(uma => uma.attributes.difficulty))];
         return ['All', ...uniqueDifficulties];
     }, [data]);
 
     const filteredUma = useMemo(() => {
         return data?.data.filter(uma => {
-            const matchesSearch = uma.name.toLowerCase().startsWith(activeSearchTerm.toLowerCase());
-            const matchesDifficulty = selectedDifficulty === 'All' || uma.difficulty === selectedDifficulty;
+            const matchesSearch = uma.attributes.name.toLowerCase().startsWith(activeSearchTerm.toLowerCase());
+            const matchesDifficulty = selectedDifficulty === 'All' || uma.attributes.difficulty === selectedDifficulty;
             return matchesSearch && matchesDifficulty;
         });
     }, [activeSearchTerm, data, selectedDifficulty]);
@@ -73,7 +73,7 @@ function UmaList() {
                     >
                         {difficulties.map(difficulty => (
                             <option
-                                key={difficulty}
+                                key={difficulty || undefined}
                                 value={difficulty}
                                 className={cx('difficulty-option')}
                             >
@@ -86,13 +86,13 @@ function UmaList() {
 
             <div className={cx('uma-grid')}>
                 {filteredUma && filteredUma?.length > 0 ? (
-                    filteredUma?.map((uma: Uma) => (
+                    filteredUma?.map((uma) => (
                         <UmaCard
-                            key={uma.id}
-                            id={uma.id}
-                            name={uma.name}
-                            avatar={uma.avatar}
-                            difficulty={uma.difficulty}
+                            key={uma.attributes.id}
+                            id={uma.attributes.id}
+                            name={uma.attributes.name}
+                            avatar={uma.attributes.avatar}
+                            difficulty={uma.attributes.difficulty}
                             onClick={() => navigate(`/game`)}
                         />
                     ))
