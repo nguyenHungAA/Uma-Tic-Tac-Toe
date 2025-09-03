@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-// const deploymentUrl = import.meta.env.VITE_BACKEND_BASE_URL;
-const deploymentUrl = null;
+let deploymentUrl = import.meta.env.VITE_BACKEND_BASE_URL;
+deploymentUrl = null;
 const localUrl = import.meta.env.VITE_BACKEND_TEST_URL;
 
 // function sleep(ms: number) {
@@ -9,6 +9,11 @@ const localUrl = import.meta.env.VITE_BACKEND_TEST_URL;
 // }
 
 export async function getUma() {
-    const response = await axios.get(`${deploymentUrl || localUrl}/api/v1/uma-list`);
+    const response = await axios.get(`${deploymentUrl || localUrl}/api/v1/uma/uma-list`);
+    return response.data;
+};
+
+export async function getUmaById(id: string) {
+    const response = await axios.get(`${deploymentUrl || localUrl}/api/v1/uma/uma-list/${id}`);
     return response.data;
 };

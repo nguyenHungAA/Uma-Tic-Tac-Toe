@@ -89,7 +89,7 @@ function UmaList() {
                     filteredUma?.map((uma) => (
                         <UmaCard
                             key={uma.attributes.id}
-                            id={uma.attributes.id}
+                            id={uma.attributes._id}
                             name={uma.attributes.name}
                             avatar={uma.attributes.avatar}
                             difficulty={uma.attributes.difficulty}
