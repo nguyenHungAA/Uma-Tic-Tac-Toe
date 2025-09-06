@@ -1,9 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { getUma, getUmaById } from "@/api/axios";
+import type { Uma } from "@/types/Uma";
+
+import type { ApiResponseType } from "@/types/apiResponseType";
 
 
 export function useUma() {
-    return useQuery({
+    return useQuery<ApiResponseType<Uma[]>>({
         queryKey: ['getUma'],
         queryFn: getUma,
     });

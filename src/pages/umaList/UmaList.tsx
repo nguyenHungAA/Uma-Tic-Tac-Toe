@@ -1,9 +1,8 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import classNames from "classnames/bind";
 import { useNavigate } from "react-router";
 
 import styles from './UmaList.module.scss';
-import type { Uma } from "@/types/Uma";
 import UmaCard from "@/component/umaCard/UmaCard";
 import SearchBar from "@/component/search/SearchBar";
 import { useUma } from "@/hooks/useUma";
@@ -13,10 +12,28 @@ function UmaList() {
     const [searchTerm, setSearchTerm] = useState('');
     const [activeSearchTerm, setActiveSearchTerm] = useState('');
     const [selectedDifficulty, setSelectedDifficulty] = useState('All');
+    const [responseUmaNumber, setResponseUmaNumber] = useState(0);
     const cx = classNames.bind(styles);
 
     const navigate = useNavigate();
     const { data, error, isLoading } = useUma();
+
+    useEffect(() => {
+        const umaGrid = document.getElementById('uma-grid');
+        switch (responseUmaNumber) {
+            case 1:
+                umaGrid?.classList.add(cx('one-uma'));
+                break;
+            case 2:
+                umaGrid?.classList.add(cx('two-uma'));
+                break;
+            default:
+                umaGrid?.classList.remove(cx('one-uma'));
+                umaGrid?.classList.remove(cx('two-uma'));
+                break;
+        }
+    }, [cx, responseUmaNumber]);
+
 
 
     const difficulties = useMemo(() => {
@@ -31,6 +48,10 @@ function UmaList() {
             return matchesSearch && matchesDifficulty;
         });
     }, [activeSearchTerm, data, selectedDifficulty]);
+
+    useEffect(() => {
+        setResponseUmaNumber(filteredUma?.length || 0);
+    }, [filteredUma]);
 
     const handleSearch = () => {
         setActiveSearchTerm(searchTerm);
@@ -84,7 +105,9 @@ function UmaList() {
                 </div>
             </div>
 
-            <div className={cx('uma-grid')}>
+            <div
+                id="uma-grid"
+                className={cx('uma-grid')}>
                 {filteredUma && filteredUma?.length > 0 ? (
                     filteredUma?.map((uma) => (
                         <UmaCard

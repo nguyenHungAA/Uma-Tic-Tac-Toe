@@ -2,13 +2,30 @@ import classNames from 'classnames/bind';
 import styles from './Header.module.scss';
 import Button from '../button/Button';
 import { useNavigate } from 'react-router';
+import useScrollDirection from '@/hooks/useScrollDirection';
+import { useEffect } from 'react';
 
 function Header() {
     const cx = classNames.bind(styles);
     const navigate = useNavigate();
 
+    const scrollDirection = useScrollDirection();
+
+    useEffect(() => {
+        const header = document.getElementById('header');
+        if (header) {
+            if (scrollDirection === 'down') {
+                header.style.top = '-150px';
+            } else {
+                header.style.top = '0';
+            }
+        }
+    }, [cx, scrollDirection]);
+
     return (
-        <header className={cx('header')}>
+        <header
+            id='header'
+            className={cx('header')}>
             <div className={cx('header-container')}>
                 <h1 className={cx('header-title')}>
                     <a href="/" className={cx('header-link')}>UmaToe</a>
@@ -16,10 +33,10 @@ function Header() {
                 <nav className={cx('header-nav')}>
                     <ul className={cx('nav-list')}>
                         <li>
-                            <a href="/" className={cx('nav-link')}>Uma List</a>
+                            <a href="/uma-list" className={cx('nav-link')}>Uma List</a>
                         </li>
                         <li>
-                            <a href="/" className={cx('nav-link')}>Chat (Comming soon)</a>
+                            <a href="/" className={cx('nav-link')}>Chat (Coming soon)</a>
                         </li>
                         <li>
                             <a href="/" className={cx('nav-link')}>FAQ</a>
@@ -44,7 +61,6 @@ function Header() {
                                 />
                             </li>
                         </div>
-
                     </ul>
                 </nav>
             </div>
