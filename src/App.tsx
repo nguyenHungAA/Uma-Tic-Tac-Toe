@@ -17,7 +17,7 @@ function App() {
           <Route index element={<HomePage />} />
           <Route path='/uma-list' element={<UmaList />} />
           <Route path='/profile/:id' element={<ProfilePage />} />
-          <Route path='/game' element={<Game />} />
+          <Route path='/:id/game' element={<Game />} />
         </Route>
 
         <Route path='/auth' element={<AuthLayout />}>

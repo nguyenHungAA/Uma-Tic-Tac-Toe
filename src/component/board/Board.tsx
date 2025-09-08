@@ -4,8 +4,16 @@ import { useEffect } from 'react';
 import Square from '../square/Square';
 
 import style from './Board.module.scss';
-export default function Board({ isXNext, squares, onPlay }:
-    { isXNext: boolean, squares: Array<string | null>, onPlay: (squares: Array<string | null>) => void }
+
+interface BoardProps {
+    isXNext: boolean;
+    squares: Array<string | null>;
+    onPlay: (squares: Array<string | null>) => void;
+    nextPlayerName?: string;
+}
+
+export default function Board({ isXNext, squares, onPlay, nextPlayerName }:
+    BoardProps
 ) {
     const cx = classNames.bind(style);
     // AI Auto-play effect
@@ -106,7 +114,7 @@ export default function Board({ isXNext, squares, onPlay }:
     if (winner) {
         status = `Winner: ${winner}`;
     } else {
-        status = `Next player: ${isXNext ? 'X (Human)' : 'O (AI)'}`;
+        status = `Next player: ${isXNext ? 'X' : (nextPlayerName || 'O')}`;
     }
 
     return <>
