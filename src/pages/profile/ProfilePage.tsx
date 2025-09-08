@@ -2,6 +2,7 @@ import { useParams } from "react-router";
 import styles from './ProfilePage.module.scss';
 import { useUmaById } from "@/hooks/useUma";
 import classNames from "classnames/bind";
+import Loading from "@/component/loading/Loading";
 
 function ProfilePage() {
     const { id } = useParams();
@@ -27,9 +28,7 @@ function ProfilePage() {
 
     if (isLoading) {
         return (
-            <div>
-                Loading...
-            </div>
+            <Loading />
         )
     }
 

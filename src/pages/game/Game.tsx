@@ -5,6 +5,7 @@ import style from './Game.module.scss'
 import { useNavigate, useParams } from 'react-router';
 import { useUmaById } from '@/hooks/useUma';
 import Button from '@/component/button/Button';
+import Loading from '@/component/loading/Loading';
 function Game() {
 
     const cx = classNames.bind(style);
@@ -22,6 +23,12 @@ function Game() {
     }
 
     const { data, error, isLoading } = useUmaById(id || '');
+
+    if (isLoading) {
+        return (
+            <Loading />
+        )
+    }
 
     if (error) {
         return (

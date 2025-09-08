@@ -20,6 +20,11 @@ function UmaList() {
 
     useEffect(() => {
         const umaGrid = document.getElementById('uma-grid');
+        if (!umaGrid) return;
+
+        umaGrid.classList.remove(cx('one-uma'));
+        umaGrid.classList.remove(cx('two-uma'));
+
         switch (responseUmaNumber) {
             case 1:
                 umaGrid?.classList.add(cx('one-uma'));
@@ -28,12 +33,9 @@ function UmaList() {
                 umaGrid?.classList.add(cx('two-uma'));
                 break;
             default:
-                umaGrid?.classList.remove(cx('one-uma'));
-                umaGrid?.classList.remove(cx('two-uma'));
                 break;
         }
     }, [cx, responseUmaNumber]);
-
 
 
     const difficulties = useMemo(() => {
@@ -43,7 +45,7 @@ function UmaList() {
 
     const filteredUma = useMemo(() => {
         return data?.data.filter(uma => {
-            const matchesSearch = uma.attributes.name.toLowerCase().startsWith(activeSearchTerm.toLowerCase());
+            const matchesSearch = uma.attributes.name.toLowerCase().includes(activeSearchTerm.toLowerCase());
             const matchesDifficulty = selectedDifficulty === 'All' || uma.attributes.difficulty === selectedDifficulty;
             return matchesSearch && matchesDifficulty;
         });

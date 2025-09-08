@@ -86,23 +86,44 @@
     margin: 0 auto;
     padding: 0 1rem;
 
-    .one-uma {
-        grid-template-columns: repeat(1, minmax(280px, 350px));
-
+    &.one-uma {
+        grid-template-columns: repeat(1, minmax(300px, 350px));
     }
 
-    .two-uma {
-        grid-template-columns: repeat(2, minmax(280px, 350px));
-
+    &.two-uma {
+        grid-template-columns: repeat(2, minmax(300px, 350px));
+        gap: 4rem;
     }
 
     @media (min-width: 768px) {
-        grid-template-columns: repeat(auto-fit, minmax(300px, 350px));
+        &.one-uma {
+            grid-template-columns: minmax(300px, 350px);
+        }
+
+        &.two-uma {
+            grid-template-columns: repeat(2, minmax(300px, 350px));
+            gap: 4rem;
+        }
+
+        &:not(.one-uma):not(.two-uma) {
+            grid-template-columns: repeat(auto-fit, minmax(300px, 350px));
+        }
     }
 
     @media (min-width: 1200px) {
-        grid-template-columns: repeat(3, minmax(320px, 360px));
-        gap: 1.5rem;
+        &.one-uma {
+            grid-template-columns: minmax(320px, 360px);
+        }
+
+        &.two-uma {
+            grid-template-columns: repeat(2, minmax(320px, 360px));
+            gap: 5rem;
+        }
+
+        &:not(.one-uma):not(.two-uma) {
+            grid-template-columns: repeat(3, minmax(320px, 360px));
+            gap: 1.5rem;
+        }
     }
 }
 

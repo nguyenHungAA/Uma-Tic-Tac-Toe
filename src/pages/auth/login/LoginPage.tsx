@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import classNames from 'classnames/bind';
 import styles from './Login.module.scss';
 import Button from '@/component/button/Button';
+import Loading from '@/component/loading/Loading';
 
 function LoginPage() {
     const cx = classNames.bind(styles);
@@ -140,7 +141,7 @@ function LoginPage() {
 
                     <Button
                         onClick={() => { }}
-                        label={isLoading ? 'Signing in...' : 'Sign In'}
+                        label={isLoading ? <Loading /> : 'Sign In'}
                         className={cx('login-button', { loading: isLoading })}
                         disabled={isLoading}
                     >

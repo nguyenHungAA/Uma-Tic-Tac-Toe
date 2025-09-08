@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import classNames from 'classnames/bind';
 import styles from './Signup.module.scss';
 import Button from '@/component/button/Button';
+import Loading from '@/component/loading/Loading';
 
 function SignupPage() {
     const cx = classNames.bind(styles);
@@ -239,7 +240,7 @@ function SignupPage() {
 
                     <Button
                         onClick={() => { }}
-                        label={isLoading ? 'Creating Account...' : 'Create Account'}
+                        label={isLoading ? <Loading /> : 'Create Account'}
                         className={cx('signup-button', { loading: isLoading })}
                         disabled={isLoading}
                     >

@@ -1,8 +1,9 @@
 import classNames from "classnames/bind";
 import styles from './Button.module.scss';
+import type { JSX } from "react/jsx-dev-runtime";
 
 interface ButtonProps {
-    label: string;
+    label: string | JSX.Element;
     onClick: () => void;
     primary?: boolean;
     className?: string;
