@@ -4,12 +4,32 @@ import { useUmaById } from "@/hooks/useUma";
 import classNames from "classnames/bind";
 import Loading from "@/component/loading/Loading";
 import Button from "@/component/button/Button";
+import { useEffect } from "react";
 
 function ProfilePage() {
     const { id } = useParams();
     const { data, error, isLoading } = useUmaById(id || '');
-
     const cx = classNames.bind(styles);
+
+    useEffect(() => {
+        if (id) {
+            const coverPhotoElement = document.getElementById('cover-photo');
+            const profileAvtarElement = document.getElementById('profile-avatar');
+            const message = document.getElementById('message-btn');
+
+            if (coverPhotoElement) {
+                coverPhotoElement.style.background = `linear-gradient(135deg, ${uma.themeColor}, ${uma.gradientColor} 100%)`;
+            }
+
+            if (profileAvtarElement) {
+                profileAvtarElement.style.background = uma.themeColor;
+            }
+
+            if (message) {
+                message.style.background = uma.themeColor;
+            }
+        }
+    }, [data])
 
     if (error) {
         return (
@@ -31,7 +51,9 @@ function ProfilePage() {
         <div className={cx('profile-page')}>
             {/* Cover Photo Section */}
             <div className={cx('cover-section')}>
-                <div className={cx('cover-photo')}>
+                <div
+                    id="cover-photo"
+                    className={cx('cover-photo')}>
                     <div className={cx('cover-gradient')}></div>
                 </div>
 
@@ -39,6 +61,7 @@ function ProfilePage() {
                 <div className={cx('profile-header')}>
                     <div className={cx('profile-avatar-container')}>
                         <img
+                            id="profile-avatar"
                             src={uma.avatar}
                             alt={uma.name}
                             className={cx('profile-avatar')}
@@ -50,15 +73,15 @@ function ProfilePage() {
                         <p className={cx('profile-title')}>{uma.title}</p>
                         <div className={cx('profile-stats')}>
                             <div className={cx('stat-item')}>
-                                <span className={cx('stat-number')}>127</span>
+                                <span className={cx('stat-number')}>{uma.totalRaces}</span>
                                 <span className={cx('stat-label')}>Races</span>
                             </div>
                             <div className={cx('stat-item')}>
-                                <span className={cx('stat-number')}>2.4K</span>
+                                <span className={cx('stat-number')}>{uma.peakFans}</span>
                                 <span className={cx('stat-label')}>Fans</span>
                             </div>
                             <div className={cx('stat-item')}>
-                                <span className={cx('stat-number')}>89</span>
+                                <span className={cx('stat-number')}>{uma.totalWins}</span>
                                 <span className={cx('stat-label')}>Wins</span>
                             </div>
                         </div>
@@ -67,9 +90,11 @@ function ProfilePage() {
                     <div className={cx('profile-actions')}>
 
                         <Button
+                            id="message-btn"
                             label={"Message"}
                             onClick={() => { alert('Message button clicked!') }}
-                            className={cx('action-btn', 'primary')}>
+                            className={cx('action-btn', 'primary')}
+                        >
                             Message
                         </Button>
                         <Button
@@ -99,7 +124,7 @@ function ProfilePage() {
                                 </div>
                                 <div className={cx('info-item')}>
                                     <span className={cx('info-label')}>Joined</span>
-                                    <span className={cx('info-value')}>January 2024</span>
+                                    <span className={cx('info-value')}>{uma.joinedDate}</span>
                                 </div>
                                 <div className={cx('info-item')}>
                                     <span className={cx('info-label')}>Location</span>
@@ -107,7 +132,7 @@ function ProfilePage() {
                                 </div>
                                 <div className={cx('info-item')}>
                                     <span className={cx('info-label')}>Status</span>
-                                    <span className={cx('info-value', 'active')}>Active Trainer</span>
+                                    <span className={cx('info-value', 'active')}>{uma.status}</span>
                                 </div>
                             </div>
                         </div>
@@ -116,31 +141,11 @@ function ProfilePage() {
                     {/* Recent Activity */}
                     <div className={cx('card')}>
                         <div className={cx('card-header')}>
-                            <h3 className={cx('card-title')}>Recent Activity</h3>
+                            <h3 className={cx('card-title')}>Real life interpretation</h3>
                         </div>
                         <div className={cx('card-content')}>
                             <div className={cx('activity-list')}>
-                                <div className={cx('activity-item')}>
-                                    <div className={cx('activity-icon')}>🏆</div>
-                                    <div className={cx('activity-content')}>
-                                        <p className={cx('activity-text')}>Won the Spring Championship</p>
-                                        <span className={cx('activity-time')}>2 hours ago</span>
-                                    </div>
-                                </div>
-                                <div className={cx('activity-item')}>
-                                    <div className={cx('activity-icon')}>⭐</div>
-                                    <div className={cx('activity-content')}>
-                                        <p className={cx('activity-text')}>Achieved new personal best</p>
-                                        <span className={cx('activity-time')}>1 day ago</span>
-                                    </div>
-                                </div>
-                                <div className={cx('activity-item')}>
-                                    <div className={cx('activity-icon')}>🎯</div>
-                                    <div className={cx('activity-content')}>
-                                        <p className={cx('activity-text')}>Completed training milestone</p>
-                                        <span className={cx('activity-time')}>3 days ago</span>
-                                    </div>
-                                </div>
+                                <p className={cx('activity-text')}>{uma.realLifeInterpretation}</p>
                             </div>
                         </div>
                     </div>
