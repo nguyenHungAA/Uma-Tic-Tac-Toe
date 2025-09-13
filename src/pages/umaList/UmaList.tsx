@@ -7,16 +7,25 @@ import UmaCard from "@/component/umaCard/UmaCard";
 import SearchBar from "@/component/search/SearchBar";
 import { useUma } from "@/hooks/useUma";
 import UmaListSkeleton from "./UmaListSkeleton";
+import Pagination from "@/component/pagination/Pagination";
+
+const pageSize = 9;
 
 function UmaList() {
     const [searchTerm, setSearchTerm] = useState('');
     const [activeSearchTerm, setActiveSearchTerm] = useState('');
     const [selectedDifficulty, setSelectedDifficulty] = useState('All');
     const [responseUmaNumber, setResponseUmaNumber] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
+
     const cx = classNames.bind(styles);
 
     const navigate = useNavigate();
     const { data, error, isLoading } = useUma();
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [currentPage]);
 
     useEffect(() => {
         const umaGrid = document.getElementById('uma-grid');
@@ -43,13 +52,19 @@ function UmaList() {
         return ['All', ...uniqueDifficulties];
     }, [data]);
 
-    const filteredUma = useMemo(() => {
+    let filteredUma = useMemo(() => {
         return data?.data.filter(uma => {
             const matchesSearch = uma.attributes.name.toLowerCase().includes(activeSearchTerm.toLowerCase());
             const matchesDifficulty = selectedDifficulty === 'All' || uma.attributes.difficulty === selectedDifficulty;
             return matchesSearch && matchesDifficulty;
         });
     }, [activeSearchTerm, data, selectedDifficulty]);
+
+    filteredUma = useMemo(() => {
+        const firstPageIndex = (currentPage - 1) * pageSize;
+        const lastPageIndex = firstPageIndex + pageSize;
+        return filteredUma?.slice(firstPageIndex, lastPageIndex);
+    }, [currentPage, filteredUma]);
 
     useEffect(() => {
         setResponseUmaNumber(filteredUma?.length || 0);
@@ -127,6 +142,13 @@ function UmaList() {
                     </div>
                 )}
             </div>
+            <Pagination
+                className={cx('pagination-bar')}
+                currentPage={currentPage}
+                totalCount={data?.data.length || 0}
+                pageSize={pageSize}
+                onPageChange={page => setCurrentPage(page)}
+            />
         </div>
     );
 }

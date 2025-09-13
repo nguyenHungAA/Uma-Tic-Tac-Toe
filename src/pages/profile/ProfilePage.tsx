@@ -49,7 +49,6 @@ function ProfilePage() {
 
     return (
         <div className={cx('profile-page')}>
-            {/* Cover Photo Section */}
             <div className={cx('cover-section')}>
                 <div
                     id="cover-photo"
@@ -57,7 +56,6 @@ function ProfilePage() {
                     <div className={cx('cover-gradient')}></div>
                 </div>
 
-                {/* Profile Header */}
                 <div className={cx('profile-header')}>
                     <div className={cx('profile-avatar-container')}>
                         <img

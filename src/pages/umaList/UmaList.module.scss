@@ -2,6 +2,7 @@
     min-height: 100vh;
     padding: 0 2rem 2rem 2rem;
     color: white;
+    margin: 0 auto;
 }
 
 .uma-list-skeleton {
@@ -86,6 +87,7 @@
     margin: 0 auto;
     padding: 0 1rem;
 
+
     &.one-uma {
         grid-template-columns: repeat(1, minmax(300px, 350px));
     }
@@ -125,6 +127,11 @@
             gap: 1.5rem;
         }
     }
+}
+
+.pagination-bar {
+    display: flex;
+    justify-content: center;
 }
 
 // Responsive design
