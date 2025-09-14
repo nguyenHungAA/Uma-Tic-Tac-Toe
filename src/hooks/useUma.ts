@@ -5,10 +5,10 @@ import type { Uma } from "@/types/Uma";
 import type { ApiResponseType } from "@/types/apiResponseType";
 
 
-export function useUma() {
+export function useUma(offset: number = 0, limit: number = 27) {
     return useQuery<ApiResponseType<Uma[]>>({
-        queryKey: ['getUma'],
-        queryFn: getUma,
+        queryKey: ['getUma', offset, limit],
+        queryFn: () => getUma(offset, limit),
     });
 }
 

@@ -10,8 +10,15 @@ const localUrl = import.meta.env.VITE_BACKEND_TEST_URL;
 //     return new Promise(resolve => setTimeout(resolve, ms));
 // }
 
-export async function getUma(): Promise<ApiResponseType<Uma[]>> {
-    const response = await axios.get(`${deploymentUrl || localUrl}/api/v1/uma/uma-list`);
+export async function getUma(offset: number = 0, limit: number = 27)
+    : Promise<ApiResponseType<Uma[]>> {
+
+    const queryParams = new URLSearchParams({
+        offset: offset.toString(),
+        limit: limit.toString(),
+    })
+
+    const response = await axios.get(`${deploymentUrl || localUrl}/api/v1/uma/uma-list?${queryParams}`);
     return response.data;
 };
 

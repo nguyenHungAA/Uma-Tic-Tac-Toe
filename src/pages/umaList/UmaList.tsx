@@ -8,20 +8,42 @@ import SearchBar from "@/component/search/SearchBar";
 import { useUma } from "@/hooks/useUma";
 import UmaListSkeleton from "./UmaListSkeleton";
 import Pagination from "@/component/pagination/Pagination";
+import type { Uma } from "@/types/Uma";
 
 const pageSize = 9;
-
+const fetchSize = 27;
 function UmaList() {
     const [searchTerm, setSearchTerm] = useState('');
     const [activeSearchTerm, setActiveSearchTerm] = useState('');
     const [selectedDifficulty, setSelectedDifficulty] = useState('All');
     const [responseUmaNumber, setResponseUmaNumber] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
+    const [allUmas, setAllUmas] = useState<Uma[]>([]);
 
     const cx = classNames.bind(styles);
-
     const navigate = useNavigate();
-    const { data, error, isLoading } = useUma();
+
+    const currentBatch = Math.floor((currentPage - 1) / 3);
+    const offset = currentBatch * fetchSize;
+
+
+    const { data, error, isLoading } = useUma(offset, fetchSize);
+
+    useEffect(() => {
+        if (data && data.data) {
+            setAllUmas(prev => {
+                const newUmas = [...prev];
+                const startIndex = offset;
+
+                data.data.forEach((uma, index) => {
+                    newUmas[startIndex + index] = uma;
+                });
+                return newUmas;
+            })
+        }
+    }, [data, offset]);
+
+
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -46,33 +68,40 @@ function UmaList() {
         }
     }, [cx, responseUmaNumber]);
 
-
     const difficulties = useMemo(() => {
         const uniqueDifficulties = [...new Set(data?.data.map(uma => uma.attributes.difficulty))];
         return ['All', ...uniqueDifficulties];
     }, [data]);
 
-    let filteredUma = useMemo(() => {
-        return data?.data.filter(uma => {
+
+
+    const filteredUma = useMemo(() => {
+        return allUmas.filter(uma => {
             const matchesSearch = uma.attributes.name.toLowerCase().includes(activeSearchTerm.toLowerCase());
-            const matchesDifficulty = selectedDifficulty === 'All' || uma.attributes.difficulty === selectedDifficulty;
+            const matchesDifficulty = uma.attributes.difficulty === selectedDifficulty;
+            if (selectedDifficulty === 'All') {
+                return matchesSearch;
+            }
             return matchesSearch && matchesDifficulty;
         });
-    }, [activeSearchTerm, data, selectedDifficulty]);
+    }, [activeSearchTerm, allUmas, selectedDifficulty]);
+    console.log(filteredUma);
 
-    filteredUma = useMemo(() => {
+    const currentPageUmas = useMemo(() => {
         const firstPageIndex = (currentPage - 1) * pageSize;
         const lastPageIndex = firstPageIndex + pageSize;
         return filteredUma?.slice(firstPageIndex, lastPageIndex);
     }, [currentPage, filteredUma]);
 
     useEffect(() => {
-        setResponseUmaNumber(filteredUma?.length || 0);
-    }, [filteredUma]);
+        setResponseUmaNumber(currentPageUmas?.length || 0);
+    }, [currentPageUmas]);
 
     const handleSearch = () => {
         setActiveSearchTerm(searchTerm);
+        setCurrentPage(1);
     }
+
 
     const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
@@ -125,8 +154,8 @@ function UmaList() {
             <div
                 id="uma-grid"
                 className={cx('uma-grid')}>
-                {filteredUma && filteredUma?.length > 0 ? (
-                    filteredUma?.map((uma) => (
+                {currentPageUmas && currentPageUmas?.length > 0 ? (
+                    currentPageUmas?.map((uma) => (
                         <UmaCard
                             key={uma.attributes.id}
                             id={uma.attributes._id}
@@ -145,7 +174,7 @@ function UmaList() {
             <Pagination
                 className={cx('pagination-bar')}
                 currentPage={currentPage}
-                totalCount={data?.data.length || 0}
+                totalCount={data?.meta.totalItems || 0}
                 pageSize={pageSize}
                 onPageChange={page => setCurrentPage(page)}
             />
