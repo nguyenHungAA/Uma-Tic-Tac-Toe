@@ -1,11 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Board from "../../component/board/Board";
 import classNames from 'classnames/bind';
 import style from './Game.module.scss'
 import { useNavigate, useParams } from 'react-router';
 import { useUmaById } from '@/hooks/useUma';
-import Button from '@/component/button/Button';
 import Loading from '@/component/loading/Loading';
+import Button from '@/component/button/Button';
+import ErrorComponent from '@/component/error/ErrorComponent';
 function Game() {
 
     const cx = classNames.bind(style);
@@ -13,6 +14,7 @@ function Game() {
     const [history, setHistory] = useState([Array(9).fill(null)]);
     const [currentMove, setCurrentMove] = useState(0);
     const [showMoreMoves, setShowMoreMoves] = useState(false);
+    const [updateWinner, setUpdateWinner] = useState<string | null>(null);
     const currentSquares = history[currentMove];
     const isXNext = currentMove % 2 === 0;
 
@@ -32,9 +34,9 @@ function Game() {
 
     if (error) {
         return (
-            <div>
-                Error loading data: {(error as Error).message}
-            </div>
+            <ErrorComponent
+                message={`Error loading data: ${(error as unknown as Error)}`}
+            />
         )
     }
 
@@ -44,9 +46,10 @@ function Game() {
                 Cant find uma with {id}
             </div>
         )
-    } else {
-        console.log(data);
+    }
 
+    function setWinner(childData: string | null) {
+        setUpdateWinner(childData);
     }
 
 
@@ -109,12 +112,29 @@ function Game() {
                         squares={currentSquares}
                         onPlay={handlePlay}
                         nextPlayerName={isXNext ? 'Human' : data.data[0].attributes.name}
+                        parentCallback={setWinner}
                     />
                 </div>
                 <div className={cx('game-info')}>
                     <ol>
                         {renderMoreMoves()}
                     </ol>
+
+                    {updateWinner && <div className={cx('game-button-container')}>
+                        <Button
+                            className={cx('game-button')}
+                            onClick={() => navigate('/')}
+                            label='Restart Game'
+                            primary={true}
+                        />
+                        <Button
+                            className={cx('game-button')}
+                            onClick={() => navigate('/')}
+                            label='Choose Another Uma Musume'
+                            primary={false}
+                        />
+                    </div>}
+
                 </div>
             </div>
         </div>

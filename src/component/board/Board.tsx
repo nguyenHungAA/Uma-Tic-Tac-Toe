@@ -10,12 +10,15 @@ interface BoardProps {
     squares: Array<string | null>;
     onPlay: (squares: Array<string | null>) => void;
     nextPlayerName?: string;
+    parentCallback?: (winner: string | null) => void;
 }
 
-export default function Board({ isXNext, squares, onPlay, nextPlayerName }:
+let winner;
+export default function Board({ isXNext, squares, onPlay, nextPlayerName, parentCallback }:
     BoardProps
 ) {
     const cx = classNames.bind(style);
+
     // AI Auto-play effect
     useEffect(() => {
         // Only play when it's O's turn, game isn't over, and there are empty squares
@@ -106,34 +109,47 @@ export default function Board({ isXNext, squares, onPlay, nextPlayerName }:
                 return squares[a];
             }
         }
-        return null;
+        let counter = 0;
+
+        for (let i = 0; i < lines.length; i++) {
+            const [a, b, c] = lines[i];
+            if (squares[a] && squares[b] && squares[c]) {
+                counter++;
+            }
+        }
+        return counter === lines.length ? 'Tie' : null;
     }
 
-    const winner = calculateWinner(squares);
+    winner = calculateWinner(squares);
+
+    if (winner && parentCallback) {
+        parentCallback(winner);
+    }
+
     let status;
-    if (winner) {
-        status = `Winner: ${winner}`;
+    if (winner !== null) {
+        status = `Winner ${winner}`
     } else {
-        status = `Next player: ${isXNext ? 'X' : (nextPlayerName || 'O')}`;
+        status = `Next player: ${nextPlayerName !== 'Human' ? nextPlayerName : "Human"}`
     }
 
     return <>
         <div className={cx('status')}>{status}</div>
         <div className={cx('board')}>
             <div className={cx('board-row')}>
-                <Square id={0} value={squares[0]} onSquareClick={() => handleSquareClick(0)} />
-                <Square id={1} value={squares[1]} onSquareClick={() => handleSquareClick(1)} />
-                <Square id={2} value={squares[2]} onSquareClick={() => handleSquareClick(2)} />
+                <Square id={0} value={squares[0]} onSquareClick={() => handleSquareClick(0)} disabled={nextPlayerName !== 'Human'} />
+                <Square id={1} value={squares[1]} onSquareClick={() => handleSquareClick(1)} disabled={nextPlayerName !== 'Human'} />
+                <Square id={2} value={squares[2]} onSquareClick={() => handleSquareClick(2)} disabled={nextPlayerName !== 'Human'} />
             </div>
             <div className={cx('board-row')}>
-                <Square id={3} value={squares[3]} onSquareClick={() => handleSquareClick(3)} />
-                <Square id={4} value={squares[4]} onSquareClick={() => handleSquareClick(4)} />
-                <Square id={5} value={squares[5]} onSquareClick={() => handleSquareClick(5)} />
+                <Square id={3} value={squares[3]} onSquareClick={() => handleSquareClick(3)} disabled={nextPlayerName !== 'Human'} />
+                <Square id={4} value={squares[4]} onSquareClick={() => handleSquareClick(4)} disabled={nextPlayerName !== 'Human'} />
+                <Square id={5} value={squares[5]} onSquareClick={() => handleSquareClick(5)} disabled={nextPlayerName !== 'Human'} />
             </div>
             <div className={cx('board-row')}>
-                <Square id={6} value={squares[6]} onSquareClick={() => handleSquareClick(6)} />
-                <Square id={7} value={squares[7]} onSquareClick={() => handleSquareClick(7)} />
-                <Square id={8} value={squares[8]} onSquareClick={() => handleSquareClick(8)} />
+                <Square id={6} value={squares[6]} onSquareClick={() => handleSquareClick(6)} disabled={nextPlayerName !== 'Human'} />
+                <Square id={7} value={squares[7]} onSquareClick={() => handleSquareClick(7)} disabled={nextPlayerName !== 'Human'} />
+                <Square id={8} value={squares[8]} onSquareClick={() => handleSquareClick(8)} disabled={nextPlayerName !== 'Human'} />
             </div>
         </div>
     </>

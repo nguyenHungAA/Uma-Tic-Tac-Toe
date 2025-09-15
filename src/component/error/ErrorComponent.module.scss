@@ -1,0 +1,28 @@
+.error-container {
+    margin: auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.error-title {
+    margin-bottom: 1rem;
+}
+
+.error-message {
+    display: -webkit-box;
+    justify-self: center;
+    max-width: 400px;
+    margin-bottom: 1rem;
+    text-overflow: ellipsis;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.error-cta {
+    >* {
+        margin-top: 1.6rem;
+        margin-left: 0.8rem;
+    }
+}

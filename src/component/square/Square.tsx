@@ -1,7 +1,8 @@
 import classNames from "classnames/bind";
 import style from './Square.module.scss'
 
-function Square({ id, value, onSquareClick }: { id: number, value: string | null, onSquareClick: () => void }) {
+function Square({ id, value, onSquareClick, disabled }:
+    { id: number, value: string | null, onSquareClick: () => void, disabled?: boolean }) {
     const cx = classNames.bind(style);
     return (
         <>
@@ -9,6 +10,7 @@ function Square({ id, value, onSquareClick }: { id: number, value: string | null
                 id={`square-${id}`}
                 onClick={onSquareClick}
                 className={cx('square')}
+                disabled={disabled}
             >
                 {value}
             </button>
