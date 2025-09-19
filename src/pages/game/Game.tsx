@@ -48,7 +48,13 @@ function Game() {
         )
     }
 
-    function setWinner(childData: string | null) {
+    function handleRestartGame() {
+        setHistory([Array(9).fill(null)]);
+        setCurrentMove(0);
+        setUpdateWinner(null);
+    }
+
+    function handleSetWinner(childData: string | null) {
         setUpdateWinner(childData);
     }
 
@@ -112,7 +118,7 @@ function Game() {
                         squares={currentSquares}
                         onPlay={handlePlay}
                         nextPlayerName={isXNext ? 'Human' : data.data[0].attributes.name}
-                        parentCallback={setWinner}
+                        parentCallback={handleSetWinner}
                     />
                 </div>
                 <div className={cx('game-info')}>
@@ -123,13 +129,13 @@ function Game() {
                     {updateWinner && <div className={cx('game-button-container')}>
                         <Button
                             className={cx('game-button')}
-                            onClick={() => navigate('/')}
+                            onClick={handleRestartGame}
                             label='Restart Game'
                             primary={true}
                         />
                         <Button
                             className={cx('game-button')}
-                            onClick={() => navigate('/')}
+                            onClick={() => navigate('/uma-list')}
                             label='Choose Another Uma Musume'
                             primary={false}
                         />

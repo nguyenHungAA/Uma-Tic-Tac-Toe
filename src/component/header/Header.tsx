@@ -39,7 +39,7 @@ function Header() {
                             <a href="/" className={cx('nav-link')}>Chat (Coming soon)</a>
                         </li>
                         <li>
-                            <a href="/" className={cx('nav-link')}>FAQ</a>
+                            <a href="/faq" className={cx('nav-link')}>FAQ</a>
                         </li>
                         <li>
                             <a href="/" className={cx('nav-link')}>Contact</a>

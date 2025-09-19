@@ -1,0 +1,64 @@
+.faq-page {
+    padding: 20px;
+}
+
+.faq-header {
+    text-align: center;
+    margin-bottom: 20px;
+
+    h1 {
+        margin: 0;
+    }
+
+    p {
+        font-size: 1.6em;
+        margin-top: 8px;
+    }
+}
+
+.faq-body {
+    margin: 4rem 0 2rem 0;
+
+    h2 {
+        font-size: 1.5em;
+        margin: 0;
+    }
+
+    p {
+        margin-top: 8px;
+        font-size: 1.2em;
+        margin-bottom: 8px;
+    }
+
+    .faq-item {
+        padding: 24px 0;
+        border-top: 1px solid #888;
+        border-bottom: 1px solid #888;
+    }
+}
+
+
+
+.faq-footer {
+    margin-top: 4rem;
+
+    h2 {
+        margin: 0 0 12px 0;
+    }
+
+    label {
+        display: block;
+        margin: 0 0 8px 0;
+    }
+
+    textarea {
+        font-family: inherit;
+        margin-top: 12px;
+        padding: 8px;
+        font-size: 1em;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        width: 100%;
+        max-width: 600px;
+    }
+}
