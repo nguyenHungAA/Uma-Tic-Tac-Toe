@@ -29,6 +29,7 @@ function UmaList() {
 
     const { data, error, isLoading } = useUma(offset, fetchSize);
 
+
     useEffect(() => {
         if (data && data.data) {
             setAllUmas(prev => {
@@ -85,7 +86,6 @@ function UmaList() {
             return matchesSearch && matchesDifficulty;
         });
     }, [activeSearchTerm, allUmas, selectedDifficulty]);
-    console.log(filteredUma);
 
     const currentPageUmas = useMemo(() => {
         const firstPageIndex = (currentPage - 1) * pageSize;

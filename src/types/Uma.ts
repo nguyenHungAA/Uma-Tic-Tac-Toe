@@ -20,5 +20,6 @@ export interface Uma {
         realLifeInterpretation?: string;
         status?: string;
         joinedDate?: string;
+        introVideo?: string;
     };
 }

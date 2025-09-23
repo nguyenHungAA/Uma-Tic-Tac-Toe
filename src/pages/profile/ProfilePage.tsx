@@ -134,6 +134,17 @@ function ProfilePage() {
                                 </div>
                             </div>
                         </div>
+                        <div>
+                            {uma.introVideo ? (
+                                <Button
+                                    label={"Watch Intro Video"}
+                                    onClick={() => { window.open(`${uma._id}/intro-video`, '_blank') }}
+                                    primary
+                                />
+                            ) : (
+                                <></>
+                            )}
+                        </div>
                     </div>
 
                     {/* Recent Activity */}

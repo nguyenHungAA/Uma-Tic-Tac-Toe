@@ -10,6 +10,7 @@ import AuthLayout from './layout/authLayout/AuthLayout';
 import LoginPage from './pages/auth/login/LoginPage';
 import SignupPage from './pages/auth/signup/SignupPage';
 import Faq from './pages/faq/Faq';
+import VideoPage from './pages/video/VideoPage';
 function App() {
   return (
     <BrowserRouter>
@@ -21,6 +22,8 @@ function App() {
           <Route path='/:id/game' element={<Game />} />
           <Route path='/faq' element={<Faq />} />
         </Route>
+
+        <Route path='/profile/:id/intro-video' element={<VideoPage />} />
 
         <Route path='/auth' element={<AuthLayout />}>
           <Route path='login' element={<LoginPage />} />
