@@ -1,23 +1,31 @@
-'use client';
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import videojs from "video.js";
 import "video.js/dist/video-js.css";
 
-// To provide quality control option in HLS Video
 import 'videojs-hls-quality-selector/src/plugin'
-import Player from "video.js/dist/types/player";
+
+// Use the Player type from videojs
+type Player = ReturnType<typeof videojs>;
 
 interface VideoJsOptions {
     controls?: boolean;
     responsive?: boolean;
     fluid?: boolean;
+    autoplay?: boolean;
+    preload?: string;
+    height?: number;
+    width?: string | number;
+    aspectRatio?: string;
+    muted?: boolean;
+    poster?: string;
+    maxWidth?: string | number;
+    playbackRates?: number[];
     sources?: Array<{
         src: string;
         type: string;
     }>;
-    [key: string]: any; // allow additional props
-
+    [key: string]: unknown; // allow additional props
 }
 
 export default function VideoJS({ options, onReady }: { options: VideoJsOptions, onReady?: (player: Player) => void }) {
@@ -25,7 +33,7 @@ export default function VideoJS({ options, onReady }: { options: VideoJsOptions,
     const playerRef = useRef<Player>(null);
 
     // Build video options
-    const buildVideoOptions = () => ({
+    const buildVideoOptions = useCallback(() => ({
         controls: options?.controls ?? true,
         autoplay: options?.autoplay ?? false,
         preload: options?.preload ?? 'metadata',
@@ -44,7 +52,7 @@ export default function VideoJS({ options, onReady }: { options: VideoJsOptions,
             }
         },
         playbackRates: options?.playbackRates || [0.5, 1, 1.25, 1.5, 2],
-    });
+    }), [options]);
 
     // Initialize player effect
     useEffect(() => {
@@ -109,7 +117,7 @@ export default function VideoJS({ options, onReady }: { options: VideoJsOptions,
                 console.error('VideoJS: Error updating player', error);
             }
         }
-    }, [options, onReady]);
+    }, [options, onReady, buildVideoOptions]);
 
     // Cleanup effect
     useEffect(() => {

@@ -6,10 +6,6 @@ let deploymentUrl = import.meta.env.VITE_BACKEND_BASE_URL;
 // deploymentUrl = null;
 const localUrl = import.meta.env.VITE_BACKEND_TEST_URL;
 
-// function sleep(ms: number) {
-//     return new Promise(resolve => setTimeout(resolve, ms));
-// }
-
 export async function getUma(offset: number = 0, limit: number = 27)
     : Promise<ApiResponseType<Uma[]>> {
 
@@ -26,3 +22,15 @@ export async function getUmaById(id: string) {
     const response = await axios.get(`${deploymentUrl || localUrl}/api/v1/uma/uma-list/${id}`);
     return response.data;
 };
+
+interface RegisterUserPayload {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+}
+
+export async function registerUser(payload: RegisterUserPayload) {
+    const response = await axios.post(`${deploymentUrl || localUrl}/api/v1/user/auth/register`, payload);
+    return response.data;
+}
