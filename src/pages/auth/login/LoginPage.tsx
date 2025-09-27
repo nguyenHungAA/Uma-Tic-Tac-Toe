@@ -1,12 +1,12 @@
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import classNames from 'classnames/bind';
 import styles from './Login.module.scss';
 import Button from '@/component/button/Button';
 import Loading from '@/component/loading/Loading';
+import { useLoginUser } from '@/hooks/useUser';
 
-// Yup validation schema
 const loginSchema = Yup.object({
     email: Yup.string()
         .email('Please enter a valid email')
@@ -17,7 +17,6 @@ const loginSchema = Yup.object({
     rememberMe: Yup.boolean(),
 });
 
-// Initial values
 const initialValues = {
     email: '',
     password: '',
@@ -26,14 +25,13 @@ const initialValues = {
 
 function LoginPage() {
     const cx = classNames.bind(styles);
-
+    const loginUserMutation = useLoginUser();
+    const navigate = useNavigate();
     const handleSubmit = async (values: typeof initialValues, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
         try {
-            // Simulate API call
-            await new Promise(resolve => setTimeout(resolve, 2000));
-            console.log('Login attempt:', values);
+            const token = await loginUserMutation.mutateAsync({ email: values.email, password: values.password });
             alert('Login successful!');
-            // Handle successful login here
+            navigate('/');
         } catch (error) {
             console.error('Login error:', error);
             alert('Failed to login. Please try again.');

@@ -5,10 +5,11 @@ import { useNavigate } from 'react-router';
 import useScrollDirection from '@/hooks/useScrollDirection';
 import { useEffect } from 'react';
 
+
 function Header() {
     const cx = classNames.bind(styles);
     const navigate = useNavigate();
-
+    const token = document.cookie.split('; ').find(row => row.startsWith('token='))?.split('=')[1];
     const scrollDirection = useScrollDirection();
 
     useEffect(() => {
@@ -45,21 +46,33 @@ function Header() {
                             <a href="/" className={cx('nav-link')}>Contact</a>
                         </li>
                         <div className={cx('nav-auth')}>
-                            <li>
-                                <Button
-                                    className={cx('nav-link-btn')}
-                                    label='Log in'
-                                    onClick={() => { navigate('/auth/login'); }}
-                                />
-                            </li>
-                            <li>
-                                <Button
-                                    className={cx('nav-link-btn')}
-                                    primary
-                                    label='Sign up'
-                                    onClick={() => { navigate('/auth/signup'); }}
-                                />
-                            </li>
+                            {
+                                token ? <>
+                                    <li>
+                                        <Button
+                                            className={cx('nav-link-btn')}
+                                            label='Log out'
+                                            onClick={() => { navigate('/auth/logout'); }}
+                                        />
+                                    </li>
+                                </> : <>
+                                    <li>
+                                        <Button
+                                            className={cx('nav-link-btn')}
+                                            label='Log in'
+                                            onClick={() => { navigate('/auth/login'); }}
+                                        />
+                                    </li>
+                                    <li>
+                                        <Button
+                                            className={cx('nav-link-btn')}
+                                            primary
+                                            label='Sign up'
+                                            onClick={() => { navigate('/auth/signup'); }}
+                                        />
+                                    </li>
+                                </>
+                            }
                         </div>
                     </ul>
                 </nav>

@@ -1,4 +1,4 @@
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import classNames from 'classnames/bind';
@@ -7,7 +7,6 @@ import Button from '@/component/button/Button';
 import Loading from '@/component/loading/Loading';
 import { useRegisterUser } from '@/hooks/useUser';
 
-// Yup validation schema
 const signupSchema = Yup.object({
     firstName: Yup.string()
         .required('First name is required'),
@@ -27,7 +26,6 @@ const signupSchema = Yup.object({
         .required('You must agree to the terms and conditions'),
 });
 
-// Initial values
 const initialValues = {
     firstName: '',
     lastName: '',
@@ -38,6 +36,7 @@ const initialValues = {
 };
 
 function SignupPage() {
+    const navigate = useNavigate();
     const cx = classNames.bind(styles);
     const registerUserMutation = useRegisterUser();
     const handleSubmit = async (values: typeof initialValues, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
@@ -51,7 +50,8 @@ function SignupPage() {
                 createdAt: new Date().toISOString(),
                 updatedAt: new Date().toISOString(),
             });
-            console.log('Signup attempt:', values);
+            alert('Account created successfully!');
+            navigate('/auth/login');
         } catch (error) {
             console.error('Signup error:', error);
             alert('Failed to create account. Please try again.');

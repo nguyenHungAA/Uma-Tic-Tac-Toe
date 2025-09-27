@@ -2,6 +2,7 @@ import type { ApiResponseType } from '@/types/apiResponseType';
 import type { Uma } from '@/types/Uma';
 import axios from 'axios';
 
+axios.defaults.withCredentials = true;
 let deploymentUrl = import.meta.env.VITE_BACKEND_BASE_URL;
 // deploymentUrl = null;
 const localUrl = import.meta.env.VITE_BACKEND_TEST_URL;
@@ -32,5 +33,11 @@ interface RegisterUserPayload {
 
 export async function registerUser(payload: RegisterUserPayload) {
     const response = await axios.post(`${deploymentUrl || localUrl}/api/v1/user/auth/register`, payload);
+    return response.data;
+}
+
+export async function login(email: string, password: string) {
+    const response = await axios.post(`${deploymentUrl || localUrl}/api/v1/user/auth/login`,
+        { email, password }, { withCredentials: true });
     return response.data;
 }
