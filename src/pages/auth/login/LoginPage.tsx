@@ -6,6 +6,8 @@ import styles from './Login.module.scss';
 import Button from '@/component/button/Button';
 import Loading from '@/component/loading/Loading';
 import { useLoginUser } from '@/hooks/useUser';
+import { getAuth, signInWithPopup } from 'firebase/auth';
+import { GoogleAuthProvider } from 'firebase/auth';
 
 const loginSchema = Yup.object({
     email: Yup.string()
@@ -25,10 +27,14 @@ const initialValues = {
 
 function LoginPage() {
     const cx = classNames.bind(styles);
+    const auth = getAuth();
+    const provider = new GoogleAuthProvider();
     const loginUserMutation = useLoginUser();
     const navigate = useNavigate();
     const handleSubmit = async (values: typeof initialValues, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
         try {
+            console.log('Submitting login form with values:', values);
+
             const token = await loginUserMutation.mutateAsync({ email: values.email, password: values.password });
             alert('Login successful!');
             navigate('/');
@@ -39,6 +45,19 @@ function LoginPage() {
             setSubmitting(false);
         }
     };
+
+    const handleLoginWithGoogle = async () => {
+        try {
+            provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
+            const result = await signInWithPopup(auth, provider);
+            const user = result.user;
+            console.log('Google sign-in user:', user);
+            navigate('/');
+        } catch (error) {
+            console.error('Google sign-in error:', error);
+            alert('Failed to sign up with Google. Please try again.');
+        }
+    }
 
     return (
         <div className={cx('login-page')}>
@@ -140,7 +159,7 @@ function LoginPage() {
 
                 <div className={cx('social-login')}>
                     <Button
-                        onClick={() => alert('Google login not implemented')}
+                        onClick={handleLoginWithGoogle}
                         label="Google"
                         className={cx('social-button', 'google')}>
                     </Button>

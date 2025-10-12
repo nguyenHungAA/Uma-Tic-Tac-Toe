@@ -36,8 +36,16 @@ export async function registerUser(payload: RegisterUserPayload) {
     return response.data;
 }
 
-export async function login(email: string, password: string) {
+interface loginPayload {
+    email?: string,
+    password?: string,
+    idToken?: string,
+    firebaseUid?: string,
+    firebaseEmail?: string | null,
+}
+
+export async function login(data: loginPayload) {
     const response = await axios.post(`${deploymentUrl || localUrl}/api/v1/user/auth/login`,
-        { email, password }, { withCredentials: true });
+        { ...data }, { withCredentials: true });
     return response.data;
 }

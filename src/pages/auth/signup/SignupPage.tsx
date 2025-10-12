@@ -6,6 +6,9 @@ import styles from './Signup.module.scss';
 import Button from '@/component/button/Button';
 import Loading from '@/component/loading/Loading';
 import { useRegisterUser } from '@/hooks/useUser';
+import { signInWithPopup } from 'firebase/auth';
+import { GoogleAuthProvider } from 'firebase/auth';
+import { auth } from '@/config/firebase';
 
 const signupSchema = Yup.object({
     firstName: Yup.string()
@@ -37,6 +40,7 @@ const initialValues = {
 
 function SignupPage() {
     const navigate = useNavigate();
+    const provider = new GoogleAuthProvider();
     const cx = classNames.bind(styles);
     const registerUserMutation = useRegisterUser();
     const handleSubmit = async (values: typeof initialValues, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
@@ -59,6 +63,19 @@ function SignupPage() {
             setSubmitting(false);
         }
     };
+
+    const handleSignUpWithGoogle = async () => {
+        try {
+            provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
+            const result = await signInWithPopup(auth, provider);
+            const user = result.user;
+            console.log('Google sign-in user:', user);
+            navigate('/');
+        } catch (error) {
+            console.error('Google sign-in error:', error);
+            alert('Failed to sign in with Google. Please try again.');
+        }
+    }
 
     return (
         <div className={cx('signup-page')}>
@@ -224,7 +241,7 @@ function SignupPage() {
 
                 <div className={cx('social-login')}>
                     <Button
-                        onClick={() => alert('Google signup not implemented')}
+                        onClick={handleSignUpWithGoogle}
                         label="Google"
                         className={cx('social-button', 'google')}>
                     </Button>

@@ -9,9 +9,17 @@ export function useRegisterUser() {
     });
 }
 
+interface LoginPayload {
+    email?: string | undefined;
+    password?: string | undefined;
+    idToken?: string | undefined;
+    firebaseUid?: string | undefined;
+    firebaseEmail?: string | undefined;
+}
+
 export function useLoginUser() {
     return useMutation({
         mutationKey: ['loginUser'],
-        mutationFn: ({ email, password }: { email: string; password: string }) => login(email, password),
+        mutationFn: (data: LoginPayload) => login(data),
     });
 }
