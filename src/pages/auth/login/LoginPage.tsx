@@ -51,7 +51,7 @@ function LoginPage() {
             provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
             const result = await signInWithPopup(auth, provider);
             const user = result.user;
-            console.log('Google sign-in user:', user);
+            localStorage.setItem('token', user.providerData[0]?.uid || '');
             navigate('/');
         } catch (error) {
             console.error('Google sign-in error:', error);

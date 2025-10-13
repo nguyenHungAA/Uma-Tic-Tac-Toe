@@ -3,14 +3,36 @@ import styles from './Header.module.scss';
 import Button from '../button/Button';
 import { useNavigate } from 'react-router';
 import useScrollDirection from '@/hooks/useScrollDirection';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { signOut } from 'firebase/auth';
+import { auth } from '@/config/firebase';
 
 
 function Header() {
     const cx = classNames.bind(styles);
     const navigate = useNavigate();
-    const token = document.cookie.split('; ').find(row => row.startsWith('token='))?.split('=')[1];
+    const token = localStorage.getItem('token');
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
     const scrollDirection = useScrollDirection();
+
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleLogout = async () => {
+        setIsLoading(true);
+        setTimeout(async () => {
+            try {
+                await signOut(auth);
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                navigate('/auth/login');
+            } catch (error) {
+                console.error('Error signing out from Firebase:', error);
+                alert('Failed to log out. Please try again.');
+            } finally {
+                setIsLoading(false);
+            }
+        }, 1000);
+    }
 
     useEffect(() => {
         const header = document.getElementById('header');
@@ -51,9 +73,16 @@ function Header() {
                                     <li>
                                         <Button
                                             className={cx('nav-link-btn')}
-                                            label='Log out'
-                                            onClick={() => { navigate('/auth/logout'); }}
+                                            label={isLoading ? 'Loading...' : 'Log out'}
+                                            onClick={handleLogout}
                                         />
+                                    </li>
+                                    <li>
+                                        <span
+                                            className={cx('nav-username')}
+                                        >
+                                            {user?.Username}
+                                        </span>
                                     </li>
                                 </> : <>
                                     <li>
