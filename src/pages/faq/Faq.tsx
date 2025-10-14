@@ -1,30 +1,54 @@
 import { useState } from "react";
 import classNames from "classnames/bind";
+import { ChevronDown } from "lucide-react";
 import styles from './Faq.module.scss'
+
 
 function Faq() {
 
     const cx = classNames.bind(styles);
     const [questionInput, setQuestionInput] = useState("");
 
+
     const faqsQuestionsAnswers = [
         {
             id: 1,
             question: "What is this?",
-            answer: "This is a tic-tac-toe game application you can play with your favorite Uma Musume characters."
+            answer: `This is a tic-tac-toe game application you can play with your favorite Uma Musume characters.
+            This is a tic-tac-toe game application you can play with your favorite Uma MusumeThis is a tic-tac-toe game application you can play with your favorite Uma MusumeThis is a tic-tac-toe game application you can play with your favorite Uma Musume
+            `
         },
         {
             id: 2,
             question: "What is this?",
-            answer: "This is a tic-tac-toe game application you can play with your favorite Uma Musume characters."
+            answer: `This is a tic-tac-toe game application you can play with your favorite Uma Musume characters.
+            This is a tic-tac-toe game application you can play with your favorite Uma MusumeThis is a tic-tac-toe game application you can play with your favorite Uma MusumeThis is a tic-tac-toe game application you can play with your favorite Uma Musume
+            `
         },
         {
             id: 3,
             question: "What is this?",
-            answer: "This is a tic-tac-toe game application you can play with your favorite Uma Musume characters."
+            answer: `This is a tic-tac-toe game application you can play with your favorite Uma Musume characters.
+            This is a tic-tac-toe game application you can play with your favorite Uma MusumeThis is a tic-tac-toe game application you can play with your favorite Uma MusumeThis is a tic-tac-toe game application you can play with your favorite Uma Musume
+            `
         }
     ];
 
+    const toggle = (id: number) => {
+        const element = document.getElementById(`chevron-down-${id}`);
+        const answerElement = document.getElementById(`faq-answer-${id}`);
+        if (element && answerElement) {
+            if (element.classList.contains(cx('show-less'))) {
+                element.classList.remove(cx('show-less'));
+                element.classList.add(cx('show-more'));
+                answerElement.classList.add(cx('expanded'));
+            } else {
+                element.classList.remove(cx('show-more'));
+                element.classList.add(cx('show-less'));
+                answerElement.classList.remove(cx('expanded'));
+            }
+        }
+    }
 
     return (
         <div className={cx('faq-page')}>
@@ -38,8 +62,20 @@ function Faq() {
                     <div
                         className={cx('faq-item')}
                         key={faqItem.id}>
-                        <h2>{faqItem.question}</h2>
-                        <p>{faqItem.answer}</p>
+                        <div className={cx('faq-question')}>
+                            <h2>{faqItem.question}</h2>
+                            <ChevronDown
+                                id={`chevron-down-${faqItem.id}`}
+                                className={cx('show-less')}
+                                onClick={() => toggle(faqItem.id)}
+                            />
+                        </div>
+                        <p
+                            className={cx('faq-answer')}
+                            id={cx(`faq-answer-${faqItem.id}`)}
+                        >
+                            {faqItem.answer}
+                        </p>
                     </div>
                 ))}
             </div>
