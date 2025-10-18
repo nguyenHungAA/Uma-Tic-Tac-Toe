@@ -67,10 +67,13 @@ function Header() {
                         <li>
                             <a href="/" className={cx('nav-link')}>Contact</a>
                         </li>
-                        <div className={cx('nav-auth')}>
+                        <ul className={cx('nav-auth')}>
                             {
                                 token ? <>
                                     <li>
+                                        <div>
+                                            <img src={user?.avatar} alt="User Avatar" className={cx('nav-avatar')} />
+                                        </div>
                                         <Button
                                             className={cx('nav-link-btn')}
                                             label={isLoading ? 'Loading...' : 'Log out'}
@@ -102,7 +105,7 @@ function Header() {
                                     </li>
                                 </>
                             }
-                        </div>
+                        </ul>
                     </ul>
                 </nav>
             </div>

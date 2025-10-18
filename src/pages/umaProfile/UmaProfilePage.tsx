@@ -6,7 +6,7 @@ import Loading from "@/component/loading/Loading";
 import Button from "@/component/button/Button";
 import { useEffect } from "react";
 
-function ProfilePage() {
+function UmaProfilePage() {
     const { id } = useParams();
     const { data, error, isLoading } = useUmaById(id || '');
     const cx = classNames.bind(styles);
@@ -29,7 +29,7 @@ function ProfilePage() {
                 message.style.background = uma.themeColor;
             }
         }
-    }, [data])
+    }, [data, id]);
 
     if (error) {
         return (
@@ -202,4 +202,4 @@ function ProfilePage() {
 
 }
 
-export default ProfilePage;
+export default UmaProfilePage;

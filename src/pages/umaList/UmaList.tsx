@@ -109,8 +109,12 @@ function UmaList() {
         }
     }
 
-    if (isLoading) {
+    if (isLoading && allUmas.length === 0) {
         return <UmaListSkeleton />;
+    }
+
+    if (!data && !isLoading) {
+        return <div className={cx('error')}>No data available.</div>;
     }
 
     if (error) {

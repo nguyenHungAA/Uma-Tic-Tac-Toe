@@ -75,3 +75,36 @@
         text-wrap: nowrap;
     }
 }
+
+// Game.module.scss
+.no-data {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 50vh;
+    text-align: center;
+    padding: 2rem;
+
+    h2 {
+        margin-bottom: 1rem;
+        color: #f8fafc;
+    }
+
+    p {
+        margin-bottom: 2rem;
+        color: #94a3b8;
+    }
+}
+
+.refetch-indicator {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(102, 126, 234, 0.9);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    z-index: 1000;
+}

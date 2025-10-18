@@ -12,10 +12,15 @@ export function useUma(offset: number = 0, limit: number = 27) {
     });
 }
 
+// hooks/useUma.ts
 export function useUmaById(id: string) {
     return useQuery({
         queryKey: ['getUmaById', id],
         queryFn: () => getUmaById(id),
         enabled: !!id,
+        retry: 3,
+        staleTime: 5 * 60 * 1000,
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: true,
     });
 }

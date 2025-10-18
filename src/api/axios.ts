@@ -49,3 +49,28 @@ export async function login(data: loginPayload) {
         { ...data }, { withCredentials: true });
     return response.data;
 }
+
+interface FindUserByEmailPayload {
+    email: string;
+    firebaseUid?: string;
+    avatarUrl?: string | null;
+}
+
+export async function findUserByEmail(data: FindUserByEmailPayload) {
+    const response = await axios.post(`${deploymentUrl || localUrl}/api/v1/user/find-by-email`, data);
+    return response.data;
+}
+
+interface GamePayload {
+    userId: string;
+}
+
+export async function enterGame({ userId }: GamePayload) {
+    const response = await axios.post(`${deploymentUrl || localUrl}/api/v1/game/enter-game`, { userId });
+    return response.data;
+}
+
+export async function winGame({ userId }: GamePayload) {
+    const response = await axios.post(`${deploymentUrl || localUrl}/api/v1/game/win-game`, { userId });
+    return response.data;
+}

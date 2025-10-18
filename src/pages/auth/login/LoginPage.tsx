@@ -5,7 +5,7 @@ import classNames from 'classnames/bind';
 import styles from './Login.module.scss';
 import Button from '@/component/button/Button';
 import Loading from '@/component/loading/Loading';
-import { useLoginUser } from '@/hooks/useUser';
+import { useFindUserByEmail, useLoginUser } from '@/hooks/useUser';
 import { getAuth, signInWithPopup } from 'firebase/auth';
 import { GoogleAuthProvider } from 'firebase/auth';
 
@@ -30,7 +30,10 @@ function LoginPage() {
     const auth = getAuth();
     const provider = new GoogleAuthProvider();
     const loginUserMutation = useLoginUser();
+    const findUserByEmailMutation = useFindUserByEmail();
     const navigate = useNavigate();
+
+
     const handleSubmit = async (values: typeof initialValues, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
         try {
             console.log('Submitting login form with values:', values);
@@ -50,9 +53,22 @@ function LoginPage() {
         try {
             provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
             const result = await signInWithPopup(auth, provider);
-            const user = result.user;
-            localStorage.setItem('token', user.providerData[0]?.uid || '');
-            navigate('/');
+            const firebaseUser = result.user;
+            let user = null;
+            console.log('Google sign-in successful:', firebaseUser);
+
+            if (firebaseUser && firebaseUser.email) {
+                user = await findUserByEmailMutation.mutateAsync({
+                    email: firebaseUser.email,
+                    firebaseUid: firebaseUser.uid,
+                    avatarUrl: firebaseUser.photoURL
+                });
+            }
+            localStorage.setItem('token', user.data[0].attributes._doc.firebaseUid || '');
+            localStorage.setItem('user', JSON.stringify(user.data[0].attributes._doc));
+            navigate('/', {
+                state: { user: user.data[0].attributes._doc }
+            });
         } catch (error) {
             console.error('Google sign-in error:', error);
             alert('Failed to sign up with Google. Please try again.');

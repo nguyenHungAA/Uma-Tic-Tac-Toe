@@ -4,7 +4,7 @@ import './App.css'
 import Game from './pages/game/Game';
 import HomePage from './pages/home/HomePage';
 import UmaList from './pages/umaList/UmaList';
-import ProfilePage from './pages/profile/ProfilePage';
+import UmaProfilePage from './pages/umaProfile/UmaProfilePage';
 import Layout from '@/layout/commonLayout/Layout';
 import AuthLayout from './layout/authLayout/AuthLayout';
 import LoginPage from './pages/auth/login/LoginPage';
@@ -18,7 +18,8 @@ function App() {
         <Route path='/' element={<Layout />}>
           <Route index element={<HomePage />} />
           <Route path='/uma-list' element={<UmaList />} />
-          <Route path='/profile/:id' element={<ProfilePage />} />
+          <Route path='/profile/:id' element={<UmaProfilePage />} />
+          <Route path='/user-profile/:id' element={<UmaProfilePage />} />
           <Route path='/:id/game' element={<Game />} />
           <Route path='/faq' element={<Faq />} />
         </Route>

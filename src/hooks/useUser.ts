@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { login, registerUser } from "@/api/axios";
+import { enterGame, findUserByEmail, login, registerUser, winGame } from "@/api/axios";
 import type { User } from "@/types/User";
 
 export function useRegisterUser() {
@@ -23,3 +23,29 @@ export function useLoginUser() {
         mutationFn: (data: LoginPayload) => login(data),
     });
 }
+
+interface FindUserByEmailPayload {
+    email: string;
+    firebaseUid?: string;
+    avatarUrl?: string | null;
+}
+export function useFindUserByEmail() {
+    return useMutation({
+        mutationKey: ['findUserByEmail'],
+        mutationFn: (data: FindUserByEmailPayload) => findUserByEmail(data),
+    });
+}
+
+export function useEnterGame() {
+    return useMutation({
+        mutationKey: ['enterGame'],
+        mutationFn: (userId: string) => enterGame({ userId }),
+    });
+}
+
+export function useWinGame() {
+    return useMutation({
+        mutationKey: ['winGame'],
+        mutationFn: (userId: string) => winGame({ userId }),
+    });
+}   

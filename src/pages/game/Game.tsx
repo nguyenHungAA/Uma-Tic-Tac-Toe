@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Board from "../../component/board/Board";
 import classNames from 'classnames/bind';
 import style from './Game.module.scss'
@@ -8,17 +8,22 @@ import Loading from '@/component/loading/Loading';
 import Button from '@/component/button/Button';
 import ErrorComponent from '@/component/error/ErrorComponent';
 function Game() {
-
     const cx = classNames.bind(style);
     const { id } = useParams();
     const [history, setHistory] = useState([Array(9).fill(null)]);
     const [currentMove, setCurrentMove] = useState(0);
     const [showMoreMoves, setShowMoreMoves] = useState(false);
     const [updateWinner, setUpdateWinner] = useState<string | null>(null);
+
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
     const currentSquares = history[currentMove];
     const isXNext = currentMove % 2 === 0;
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        setUpdateWinner(updateWinner);
+    }, [updateWinner]);
 
     if (!id) {
         navigate('/');
@@ -52,10 +57,6 @@ function Game() {
         setHistory([Array(9).fill(null)]);
         setCurrentMove(0);
         setUpdateWinner(null);
-    }
-
-    function handleSetWinner(childData: string | null) {
-        setUpdateWinner(childData);
     }
 
 
@@ -117,8 +118,8 @@ function Game() {
                         isXNext={isXNext}
                         squares={currentSquares}
                         onPlay={handlePlay}
-                        nextPlayerName={isXNext ? 'Human' : data.data[0].attributes.name}
-                        parentCallback={handleSetWinner}
+                        currentPlayerName={isXNext ? user.firstName : data.data[0].attributes.name}
+                        nextPlayerName={isXNext ? user.firstName : data.data[0].attributes.name}
                     />
                 </div>
                 <div className={cx('game-info')}>
