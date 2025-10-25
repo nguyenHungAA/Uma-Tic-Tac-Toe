@@ -19,13 +19,11 @@ export default function Board({ isXNext, squares, onPlay, currentPlayerName, nex
 ) {
     const cx = classNames.bind(style);
 
-    // AI Auto-play effect
     useEffect(() => {
-        // Only play when it's O's turn, game isn't over, and there are empty squares
         if (!isXNext && !calculateWinner(squares) && squares.includes(null)) {
             const timer = setTimeout(() => {
                 makeAIMove();
-            }, 2000); // 1 second delay for better UX
+            }, 2000);
 
             return () => clearTimeout(timer);
         }
@@ -37,14 +35,12 @@ export default function Board({ isXNext, squares, onPlay, currentPlayerName, nex
             .filter(index => index !== null) as number[];
 
         if (availableMoves.length > 0) {
-            // Simple AI: Choose best move or random
             const bestMove = getBestMove(squares, availableMoves);
             handleSquareClick(bestMove);
         }
     }
 
     function getBestMove(currentSquares: Array<string | null>, availableMoves: number[]): number {
-        // Strategy 1: Try to win
         for (const move of availableMoves) {
             const testSquares = currentSquares.slice();
             testSquares[move] = 'O';
@@ -53,7 +49,6 @@ export default function Board({ isXNext, squares, onPlay, currentPlayerName, nex
             }
         }
 
-        // Strategy 2: Block opponent from winning
         for (const move of availableMoves) {
             const testSquares = currentSquares.slice();
             testSquares[move] = 'X';
@@ -62,19 +57,16 @@ export default function Board({ isXNext, squares, onPlay, currentPlayerName, nex
             }
         }
 
-        // Strategy 3: Take center if available
         if (availableMoves.includes(4)) {
             return 4;
         }
 
-        // Strategy 4: Take corners
         const corners = [0, 2, 6, 8];
         const availableCorners = corners.filter(corner => availableMoves.includes(corner));
         if (availableCorners.length > 0) {
             return availableCorners[Math.floor(Math.random() * availableCorners.length)];
         }
 
-        // Strategy 5: Random move
         return availableMoves[Math.floor(Math.random() * availableMoves.length)];
     }
 

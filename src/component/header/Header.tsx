@@ -6,6 +6,8 @@ import useScrollDirection from '@/hooks/useScrollDirection';
 import { useEffect, useState } from 'react';
 import { signOut } from 'firebase/auth';
 import { auth } from '@/config/firebase';
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css';
 
 
 function Header() {
@@ -16,6 +18,17 @@ function Header() {
     const scrollDirection = useScrollDirection();
 
     const [isLoading, setIsLoading] = useState(false);
+
+    useEffect(() => {
+        const header = document.getElementById('header');
+        if (header) {
+            if (scrollDirection === 'down') {
+                header.style.top = '-150px';
+            } else {
+                header.style.top = '0';
+            }
+        }
+    }, [cx, scrollDirection]);
 
     const handleLogout = async () => {
         setIsLoading(true);
@@ -34,16 +47,33 @@ function Header() {
         }, 1000);
     }
 
-    useEffect(() => {
-        const header = document.getElementById('header');
-        if (header) {
-            if (scrollDirection === 'down') {
-                header.style.top = '-150px';
-            } else {
-                header.style.top = '0';
-            }
-        }
-    }, [cx, scrollDirection]);
+
+    const profileMenuContent = (
+        <div className={cx('profile-menu')}>
+            <div className={cx('profile-info')}>
+                <p className={cx('profile-name')}>{user?.firstName} {user?.lastName}</p>
+                <p className={cx('profile-email')}>{user?.email}</p>
+            </div>
+            <div className={cx('profile-actions')}>
+                <Button
+                    className={cx('profile-btn')}
+                    label="Profile"
+                    onClick={() => navigate('/profile')}
+                />
+                <Button
+                    className={cx('profile-btn')}
+                    label="Settings"
+                    onClick={() => navigate('/settings')}
+                />
+                <Button
+                    className={cx('profile-btn', 'logout-btn')}
+                    label={isLoading ? 'Logging out...' : 'Log out'}
+                    onClick={handleLogout}
+                    disabled={isLoading}
+                />
+            </div>
+        </div>
+    );
 
     return (
         <header
@@ -70,22 +100,26 @@ function Header() {
                         <ul className={cx('nav-auth')}>
                             {
                                 token ? <>
-                                    <li>
-                                        <div>
-                                            <img src={user?.avatar} alt="User Avatar" className={cx('nav-avatar')} />
-                                        </div>
-                                        <Button
-                                            className={cx('nav-link-btn')}
-                                            label={isLoading ? 'Loading...' : 'Log out'}
-                                            onClick={handleLogout}
-                                        />
-                                    </li>
-                                    <li>
-                                        <span
-                                            className={cx('nav-username')}
+                                    <li className={cx('nav-user-info')}>
+                                        <Tippy
+                                            content={profileMenuContent}
+                                            interactive={true}
+                                            placement='bottom'
+                                            theme="light"
+                                            animation="fade"
+                                            duration={100}
+                                            hideOnClick={true}
+                                            allowHTML={true}
                                         >
-                                            {user?.Username}
-                                        </span>
+                                            <div className={cx('nav-avatar-container')}>
+                                                <img
+                                                    src={user?.avatar || '/default-avatar.png'}
+                                                    alt="User Avatar"
+                                                    className={cx('nav-avatar')}
+                                                />
+
+                                            </div>
+                                        </Tippy>
                                     </li>
                                 </> : <>
                                     <li>
