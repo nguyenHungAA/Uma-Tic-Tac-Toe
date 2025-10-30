@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getUma, getUmaById } from "@/api/axios";
+import { getUma, getUmaById } from "@/api/uma";
 import type { Uma } from "@/types/Uma";
 
 import type { ApiResponseType } from "@/types/apiResponseType";

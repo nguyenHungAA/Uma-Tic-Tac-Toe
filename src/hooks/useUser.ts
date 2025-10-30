@@ -1,6 +1,10 @@
 import { useMutation } from "@tanstack/react-query";
-import { enterGame, findUserByEmail, login, registerUser, winGame } from "@/api/axios";
+
+import type { FindUserByEmailPayload, loginPayload } from "@/api/auth/type";
 import type { User } from "@/types/User";
+
+import { registerUser, login, findUserByEmail } from "@/api/auth";
+import { enterGame, winGame } from "@/api/game";
 
 export function useRegisterUser() {
     return useMutation({
@@ -9,26 +13,14 @@ export function useRegisterUser() {
     });
 }
 
-interface LoginPayload {
-    email?: string | undefined;
-    password?: string | undefined;
-    idToken?: string | undefined;
-    firebaseUid?: string | undefined;
-    firebaseEmail?: string | undefined;
-}
-
 export function useLoginUser() {
     return useMutation({
         mutationKey: ['loginUser'],
-        mutationFn: (data: LoginPayload) => login(data),
+        mutationFn: (data: loginPayload) => login(data),
     });
 }
 
-interface FindUserByEmailPayload {
-    email: string;
-    firebaseUid?: string;
-    avatarUrl?: string | null;
-}
+
 export function useFindUserByEmail() {
     return useMutation({
         mutationKey: ['findUserByEmail'],
