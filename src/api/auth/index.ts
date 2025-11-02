@@ -4,4 +4,4 @@ export {
     registerUser,
     login,
     findUserByEmail
-}
+};

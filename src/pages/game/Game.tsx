@@ -7,6 +7,7 @@ import { useUmaById } from '@/hooks/useUma';
 import Loading from '@/component/loading/Loading';
 import Button from '@/component/button/Button';
 import ErrorComponent from '@/component/error/ErrorComponent';
+
 function Game() {
     const cx = classNames.bind(style);
     const { id } = useParams();
@@ -14,10 +15,14 @@ function Game() {
     const [currentMove, setCurrentMove] = useState(0);
     const [showMoreMoves, setShowMoreMoves] = useState(false);
     const [updateWinner, setUpdateWinner] = useState<string | null>(null);
+    const [isViewingHistory, setIsViewingHistory] = useState(false);
+    const [xMoves, setXMoves] = useState<number[]>([]);
+    const [oMoves, setOMoves] = useState<number[]>([]);
 
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     const currentSquares = history[currentMove];
     const isXNext = currentMove % 2 === 0;
+    let isPlayable = true;
 
     const navigate = useNavigate();
 
@@ -57,29 +62,62 @@ function Game() {
         setHistory([Array(9).fill(null)]);
         setCurrentMove(0);
         setUpdateWinner(null);
+        setXMoves([]);
+        setOMoves([]);
     }
 
-
     function handlePlay(newSquares: Array<string | null>) {
-        const nextHistory = [...history.slice(0, currentMove + 1), newSquares];
+        const playedIndex = newSquares.findIndex((square, index) =>
+            square !== currentSquares[index] && square !== null
+        );
+
+        if (playedIndex === -1) return;
+
+        const currentPlayerMoves = isXNext ? [...xMoves] : [...oMoves];
+
+        currentPlayerMoves.push(playedIndex);
+
+        const updatedSquares = [...newSquares];
+
+        if (currentPlayerMoves.length > 3) {
+            const oldestMoveIndex = currentPlayerMoves.shift();
+            if (oldestMoveIndex !== undefined) {
+                updatedSquares[oldestMoveIndex] = null;
+            }
+        }
+
+        if (isXNext) {
+            setXMoves(currentPlayerMoves);
+        } else {
+            setOMoves(currentPlayerMoves);
+        }
+
+        const nextHistory = [...history.slice(0, currentMove + 1), updatedSquares];
         setHistory(nextHistory);
         setCurrentMove(nextHistory.length - 1);
     }
 
     function jumpTo(move: number) {
         setCurrentMove(move);
+        setIsViewingHistory(move !== history.length - 1);
+        if (move === 0) {
+            setXMoves([]);
+            setOMoves([]);
+        }
     }
 
     const moves = history.map((squares, move) => {
         let description;
         if (move > 0) {
             description = `Go to move #${move}`;
-        } else {
-            description = 'Go to game start';
         }
         return (
             <li key={move}>
-                <button onClick={() => jumpTo(move)}>{description}</button>
+                <div>
+                    <button onClick={() => {
+                        jumpTo(move);
+                    }}>{description}</button>
+                </div>
             </li>
         )
     })
@@ -116,6 +154,7 @@ function Game() {
                 <div className={cx('game-board')}>
                     <Board
                         isXNext={isXNext}
+                        isViewingHistory={isViewingHistory}
                         squares={currentSquares}
                         onPlay={handlePlay}
                         currentPlayerName={isXNext ? user.firstName : data.data[0].attributes.name}
@@ -123,9 +162,23 @@ function Game() {
                     />
                 </div>
                 <div className={cx('game-info')}>
-                    <ol>
-                        {renderMoreMoves()}
-                    </ol>
+                    <div>
+                        {currentMove > 0 && <div style={{ display: 'flex' }}>
+                            <button onClick={() => {
+                                jumpTo(0);
+                            }}>
+                                Go to Game Start
+                            </button>
+                            <button onClick={() => {
+                                jumpTo(history.length - 1);
+                            }}>
+                                Go to Latest Move
+                            </button>
+                        </div>}
+                        <ol>
+                            {renderMoreMoves()}
+                        </ol>
+                    </div>
 
                     {updateWinner && <div className={cx('game-button-container')}>
                         <Button
@@ -146,8 +199,6 @@ function Game() {
             </div>
         </div>
     );
-
-
 }
 
 export default Game;

@@ -58,12 +58,12 @@ function Header() {
                 <Button
                     className={cx('profile-btn')}
                     label="Profile"
-                    onClick={() => navigate('/profile')}
+                    onClick={() => navigate('user/profile/' + user._id)}
                 />
                 <Button
                     className={cx('profile-btn')}
                     label="Settings"
-                    onClick={() => navigate('/settings')}
+                    onClick={() => navigate('user/settings')}
                 />
                 <Button
                     className={cx('profile-btn', 'logout-btn')}

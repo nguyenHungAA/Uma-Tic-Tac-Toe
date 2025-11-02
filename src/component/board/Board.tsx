@@ -7,6 +7,7 @@ import style from './Board.module.scss';
 
 interface BoardProps {
     isXNext: boolean;
+    isViewingHistory?: boolean;
     squares: Array<string | null>;
     onPlay: (squares: Array<string | null>) => void;
     currentPlayerName?: string;
@@ -14,7 +15,7 @@ interface BoardProps {
 }
 
 let winner;
-export default function Board({ isXNext, squares, onPlay, currentPlayerName, nextPlayerName }:
+export default function Board({ isXNext, squares, onPlay, currentPlayerName, nextPlayerName, isViewingHistory }:
     BoardProps
 ) {
     const cx = classNames.bind(style);
@@ -29,7 +30,11 @@ export default function Board({ isXNext, squares, onPlay, currentPlayerName, nex
         }
     }, [isXNext, squares]);
 
+
     function makeAIMove() {
+        if (isViewingHistory) {
+            return;
+        }
         const availableMoves = squares
             .map((square, index) => square === null ? index : null)
             .filter(index => index !== null) as number[];
@@ -41,6 +46,10 @@ export default function Board({ isXNext, squares, onPlay, currentPlayerName, nex
     }
 
     function getBestMove(currentSquares: Array<string | null>, availableMoves: number[]): number {
+        if (isViewingHistory) {
+            return -1;
+        }
+
         for (const move of availableMoves) {
             const testSquares = currentSquares.slice();
             testSquares[move] = 'O';
@@ -71,6 +80,10 @@ export default function Board({ isXNext, squares, onPlay, currentPlayerName, nex
     }
 
     function handleSquareClick(index: number) {
+        if (isViewingHistory) {
+            return;
+        }
+
         try {
             if (squares[index] || calculateWinner(squares)) {
                 return;
@@ -118,10 +131,6 @@ export default function Board({ isXNext, squares, onPlay, currentPlayerName, nex
 
     winner = calculateWinner(squares);
 
-    if (winner) {
-        //
-    }
-
     let status;
     if (winner !== null) {
         status = `Winner ${winner}`
@@ -133,19 +142,19 @@ export default function Board({ isXNext, squares, onPlay, currentPlayerName, nex
         <div className={cx('status')}>{status}</div>
         <div className={cx('board')}>
             <div className={cx('board-row')}>
-                <Square id={0} value={squares[0]} onSquareClick={() => handleSquareClick(0)} disabled={nextPlayerName !== currentPlayerName} />
-                <Square id={1} value={squares[1]} onSquareClick={() => handleSquareClick(1)} disabled={nextPlayerName !== currentPlayerName} />
-                <Square id={2} value={squares[2]} onSquareClick={() => handleSquareClick(2)} disabled={nextPlayerName !== currentPlayerName} />
+                <Square id={0} value={squares[0]} onSquareClick={() => handleSquareClick(0)} disabled={(nextPlayerName !== currentPlayerName) || isViewingHistory} />
+                <Square id={1} value={squares[1]} onSquareClick={() => handleSquareClick(1)} disabled={(nextPlayerName !== currentPlayerName) || isViewingHistory} />
+                <Square id={2} value={squares[2]} onSquareClick={() => handleSquareClick(2)} disabled={(nextPlayerName !== currentPlayerName) || isViewingHistory} />
             </div>
             <div className={cx('board-row')}>
-                <Square id={3} value={squares[3]} onSquareClick={() => handleSquareClick(3)} disabled={nextPlayerName !== currentPlayerName} />
-                <Square id={4} value={squares[4]} onSquareClick={() => handleSquareClick(4)} disabled={nextPlayerName !== currentPlayerName} />
-                <Square id={5} value={squares[5]} onSquareClick={() => handleSquareClick(5)} disabled={nextPlayerName !== currentPlayerName} />
+                <Square id={3} value={squares[3]} onSquareClick={() => handleSquareClick(3)} disabled={(nextPlayerName !== currentPlayerName) || isViewingHistory} />
+                <Square id={4} value={squares[4]} onSquareClick={() => handleSquareClick(4)} disabled={(nextPlayerName !== currentPlayerName) || isViewingHistory} />
+                <Square id={5} value={squares[5]} onSquareClick={() => handleSquareClick(5)} disabled={(nextPlayerName !== currentPlayerName) || isViewingHistory} />
             </div>
             <div className={cx('board-row')}>
-                <Square id={6} value={squares[6]} onSquareClick={() => handleSquareClick(6)} disabled={nextPlayerName !== currentPlayerName} />
-                <Square id={7} value={squares[7]} onSquareClick={() => handleSquareClick(7)} disabled={nextPlayerName !== currentPlayerName} />
-                <Square id={8} value={squares[8]} onSquareClick={() => handleSquareClick(8)} disabled={nextPlayerName !== currentPlayerName} />
+                <Square id={6} value={squares[6]} onSquareClick={() => handleSquareClick(6)} disabled={(nextPlayerName !== currentPlayerName) || isViewingHistory} />
+                <Square id={7} value={squares[7]} onSquareClick={() => handleSquareClick(7)} disabled={(nextPlayerName !== currentPlayerName) || isViewingHistory} />
+                <Square id={8} value={squares[8]} onSquareClick={() => handleSquareClick(8)} disabled={(nextPlayerName !== currentPlayerName) || isViewingHistory} />
             </div>
         </div>
     </>
