@@ -5,7 +5,7 @@ import { deploymentUrl } from '@/config/const';
 axios.defaults.withCredentials = true;
 
 export async function getUma(offset: number = 0, limit: number = 27)
-    : Promise<ApiResponseType<Uma[]>> {
+    : Promise<ApiResponseType<Uma>> {
 
     const queryParams = new URLSearchParams({
         offset: offset.toString(),

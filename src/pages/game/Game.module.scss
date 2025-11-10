@@ -61,7 +61,26 @@
     align-items: center;
     flex: 1;
     gap: 4rem;
+
+    .move-list {
+        max-height: 200px;
+        max-width: 220px;
+        overflow-y: auto;
+        padding: 1rem;
+        scrollbar-width: thin;
+        scrollbar-color: #333 transparent;
+
+        .move-item {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 0.5rem;
+        }
+
+
+    }
 }
+
+
 
 .game-button-container {
     width: auto;

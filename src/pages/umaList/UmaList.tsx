@@ -20,6 +20,7 @@ function UmaList() {
     const [currentPage, setCurrentPage] = useState(1);
     const [allUmas, setAllUmas] = useState<Uma[]>([]);
 
+
     const cx = classNames.bind(styles);
     const navigate = useNavigate();
 
@@ -29,22 +30,17 @@ function UmaList() {
 
     const { data, error, isLoading } = useUma(offset, fetchSize);
 
-
     useEffect(() => {
-        if (data && data.data) {
+        if (data?.data) {
             setAllUmas(prev => {
-                const newUmas = [...prev];
-                const startIndex = offset;
-
                 data.data.forEach((uma, index) => {
-                    newUmas[startIndex + index] = uma;
-                });
-                return newUmas;
+                    const offsetIndex = offset + index;
+                    prev[offsetIndex] = uma;
+                })
+                return [...prev];
             })
         }
     }, [data, offset]);
-
-
 
     useEffect(() => {
         window.scrollTo(0, 0);

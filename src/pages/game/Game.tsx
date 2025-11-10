@@ -22,7 +22,6 @@ function Game() {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     const currentSquares = history[currentMove];
     const isXNext = currentMove % 2 === 0;
-    let isPlayable = true;
 
     const navigate = useNavigate();
 
@@ -108,16 +107,19 @@ function Game() {
 
     const moves = history.map((squares, move) => {
         let description;
+        console.log(squares);
         if (move > 0) {
             description = `Go to move #${move}`;
+        } else {
+            return;
         }
         return (
-            <li key={move}>
-                <div>
-                    <button onClick={() => {
-                        jumpTo(move);
-                    }}>{description}</button>
-                </div>
+            <li
+                className={cx('move-item')}
+                key={move}>
+                <button onClick={() => {
+                    jumpTo(move);
+                }}>{description}</button>
             </li>
         )
     })
@@ -175,7 +177,8 @@ function Game() {
                                 Go to Latest Move
                             </button>
                         </div>}
-                        <ol>
+                        <h3>Move list</h3>
+                        <ol className={cx('move-list')}>
                             {renderMoreMoves()}
                         </ol>
                     </div>
