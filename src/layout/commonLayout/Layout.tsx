@@ -1,4 +1,5 @@
 import Header from "@/component/header/Header";
+import Footer from "@/component/footer/Footer";
 import { Outlet, useLocation } from "react-router";
 import classNames from "classnames/bind";
 import styles from './Layout.module.scss';
@@ -13,12 +14,15 @@ function Layout() {
     }, [pathname]);
 
     return (
-        <div className={cx('layout')}>
-            <Header />
-            <main className={cx('main')}>
-                <Outlet />
-            </main>
-        </div>
+        <>
+            <div className={cx('layout')}>
+                <Header />
+                <main className={cx('main')}>
+                    <Outlet />
+                </main>
+                <Footer />
+            </div>
+        </>
     )
 }
 

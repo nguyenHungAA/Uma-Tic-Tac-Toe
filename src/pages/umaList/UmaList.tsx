@@ -12,6 +12,7 @@ import type { Uma } from "@/types/Uma";
 
 const pageSize = 9;
 const fetchSize = 27;
+
 function UmaList() {
     const [searchTerm, setSearchTerm] = useState('');
     const [activeSearchTerm, setActiveSearchTerm] = useState('');
@@ -105,7 +106,7 @@ function UmaList() {
         }
     }
 
-    if (isLoading && allUmas.length === 0) {
+    if (isLoading || allUmas.length === 0) {
         return <UmaListSkeleton />;
     }
 

@@ -1,5 +1,7 @@
+@import url("../../styles/globalVariables.module.scss");
+
 .btn-primary {
-    background-color: #4f46e5;
+    background-color: var(--btn-primary-bg);
     color: white;
     border: none;
     border-radius: 25px;
@@ -10,12 +12,12 @@
     transition: background-color 0.3s ease;
 
     &:hover {
-        background-color: #4338ca;
+        background-color: var(--btn-primary-bg-hover);
     }
 }
 
 .btn-secondary {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: var(--btn-secondary-bg);
     color: white;
     border-radius: 25px;
     padding: 12px 16px;

@@ -8,14 +8,17 @@ function HomePage() {
     const navigate = useNavigate();
     const cx = classNames.bind(styles);
     const [imageIndex, setImageIndex] = useState(0);
+    const [manualSlide, setManualSlide] = useState(false);
 
     useEffect(() => {
+        if (manualSlide) return;
         const interval = setInterval(() => {
             setImageIndex((prevIndex) => (prevIndex + 1) % 3);
         }, 3000);
 
         return () => clearInterval(interval);
-    }, []);
+
+    }, [manualSlide]);
 
     const imageUrls = [
         "https://pub-362e04190c3d4dd2b44146c65e89f2a1.r2.dev/manhattanCafe.jpg",
@@ -36,6 +39,7 @@ function HomePage() {
     }
 
     const handleSlideClick = (index: number) => {
+        setManualSlide(true);
         setImageIndex(index);
     }
 
@@ -74,10 +78,10 @@ function HomePage() {
                         <h2>How to Play</h2>
                         <ol className={cx('instruction-list')}>
                             <li>1) Select your favorite Uma Musume from the Uma List.</li>
-                            <li>2) Challenge other players to a game of Tic Tac Toe.</li>
-                            <li>3) Take turns placing your marks on the 3x3 grid.</li>
-                            <li>4) The first player to align three marks horizontally, vertically, or diagonally wins!</li>
-                            <li>5) If all nine squares are filled without a winner, the game ends in a draw.</li>
+                            <li>2) You will be playing the usual tic tac toe game with her in a 3x3 grid</li>
+                            <li>3) Here's the twist, you can only place 3 marks on the grid at a time. The fourth mark will delete the first one</li>
+                            <li>4) Keep playing until you win the game (or not)</li>
+                            <li>5) Have fun!</li>
                         </ol>
                     </div>
                     <div className={cx('instruction-image')}>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Board from "../../component/board/Board";
 import classNames from 'classnames/bind';
 import style from './Game.module.scss'
@@ -18,16 +18,45 @@ function Game() {
     const [isViewingHistory, setIsViewingHistory] = useState(false);
     const [xMoves, setXMoves] = useState<number[]>([]);
     const [oMoves, setOMoves] = useState<number[]>([]);
+    const [umaMessage, setUmaMessage] = useState<string>("Let's have a fun game, shall we?");
 
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     const currentSquares = history[currentMove];
     const isXNext = currentMove % 2 === 0;
+    const times = useRef(0);
 
     const navigate = useNavigate();
 
     useEffect(() => {
         setUpdateWinner(updateWinner);
     }, [updateWinner]);
+
+    const generateUmaMessage = (playerMoves: number[], umaMoves: number[]) => {
+        if (playerMoves.length === 0) {
+            setUmaMessage("Can we start already? My coffee is getting cold...");
+        } else if (playerMoves.length === 1) {
+            setUmaMessage("Alright, my turn then...");
+        }
+        if (umaMoves.length > 2 && playerMoves.length >= 3) {
+            setUmaMessage("Tachyon told me you are quite interesting... she wants you to be her guinea pig...");
+        }
+        times.current += 1;
+
+        if (times.current > 5) {
+            setUmaMessage("Make it quick, my friend is waiting...");
+        }
+
+        if (times.current > 10) {
+            setUmaMessage("This is gonna take some time...isn't it?");
+        }
+    }
+
+    useEffect(() => {
+        generateUmaMessage(xMoves, oMoves);
+    }, [xMoves, oMoves]);
+
+    console.log(umaMessage);
+
 
     if (!id) {
         navigate('/');
@@ -150,6 +179,8 @@ function Game() {
                 <div className={cx('uma-text')}>
                     <h2>{data.data[0].attributes.name}</h2>
                     <h3>{data.data[0].attributes.title}</h3>
+
+                    <p className={cx('uma-message')}>{umaMessage}</p>
                 </div>
             </div>
             <div className={cx('game-container')}>

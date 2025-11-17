@@ -14,7 +14,7 @@
 }
 
 .uma-info {
-    grid-column: 1 / span 4;
+    grid-column: 1 / span 8;
     grid-row: 1 / span 1;
     display: flex;
 
@@ -44,6 +44,26 @@
         h3 {
             margin: 0;
             font-weight: 400;
+        }
+
+        .uma-message {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.75rem 1rem;
+            border-radius: 18px;
+            max-width: 300px;
+            position: relative;
+            margin-top: 0.5rem;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+            font-size: 0.95rem;
+            line-height: 1.4;
+            word-wrap: break-word;
+
+            &:hover {
+                box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+                transform: translateY(-1px);
+                transition: all 0.2s ease;
+            }
         }
     }
 }
