@@ -3,10 +3,14 @@ import classNames from "classnames/bind";
 import styles from './homePage.module.scss';
 import Button from "@/component/button/Button";
 import { useEffect, useState } from "react";
+import { checkLogin } from "@/util/checkLogin";
+import { auth } from "@/config/firebase";
+import Modal from "@/component/modal/Modal";
 
 function HomePage() {
     const navigate = useNavigate();
     const cx = classNames.bind(styles);
+    const [showModal, setShowModal] = useState(false);
     const [imageIndex, setImageIndex] = useState(0);
     const [manualSlide, setManualSlide] = useState(false);
 
@@ -51,7 +55,13 @@ function HomePage() {
                 <div className={cx('home-buttons')}>
                     <Button
                         label="Start game now"
-                        onClick={() => navigate('/uma-list')}
+                        onClick={() => checkLogin(auth).then((isLoggedIn) => {
+                            if (isLoggedIn) {
+                                navigate('/uma-list');
+                            } else {
+                                setShowModal(true);
+                            }
+                        })}
                         className={cx('home-btn')}
                         primary
                     />
@@ -103,7 +113,14 @@ function HomePage() {
             <div className={cx('stars')}>
                 {generateStars()}
             </div>
-
+            <Modal
+                isOpen={showModal}
+                onClose={() => setShowModal(false)}
+                message="Please log in to access this feature."
+                navigatePath="/auth/login"
+                navigateLabel="Log in"
+                showCancel={true}
+            />
 
         </div>
     );

@@ -27,8 +27,6 @@ function UmaList() {
 
     const currentBatch = Math.floor((currentPage - 1) / 3);
     const offset = currentBatch * fetchSize;
-
-
     const { data, error, isLoading } = useUma(offset, fetchSize);
 
     useEffect(() => {
@@ -70,8 +68,6 @@ function UmaList() {
         const uniqueDifficulties = [...new Set(data?.data.map(uma => uma.attributes.difficulty))];
         return ['All', ...uniqueDifficulties];
     }, [data]);
-
-
 
     const filteredUma = useMemo(() => {
         return allUmas.filter(uma => {

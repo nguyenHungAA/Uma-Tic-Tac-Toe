@@ -8,16 +8,29 @@ import { signOut } from 'firebase/auth';
 import { auth } from '@/config/firebase';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
+import Modal from '@/component/modal/Modal';
+import { checkLogin } from '@/util/checkLogin';
 
 
 function Header() {
     const cx = classNames.bind(styles);
     const navigate = useNavigate();
+    const [showModal, setShowModal] = useState(false);
     const token = localStorage.getItem('token');
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     const scrollDirection = useScrollDirection();
 
     const [isLoading, setIsLoading] = useState(false);
+
+    const checkingNavigate = (path: string) => {
+        checkLogin(auth).then((isLoggedIn) => {
+            if (isLoggedIn) {
+                navigate(path);
+            } else {
+                setShowModal(true);
+            }
+        });
+    }
 
     useEffect(() => {
         const header = document.getElementById('header');
@@ -76,74 +89,84 @@ function Header() {
     );
 
     return (
-        <header
-            id='header'
-            className={cx('header')}>
-            <div className={cx('header-container')}>
-                <h1 className={cx('header-title')}>
-                    <a href="/" className={cx('header-link')}>UmaToe</a>
-                </h1>
-                <nav className={cx('header-nav')}>
-                    <ul className={cx('nav-list')}>
-                        <li>
-                            <a href="/uma-list" className={cx('nav-link')}>Uma List</a>
-                        </li>
-                        <li>
-                            <a href="/" className={cx('nav-link')}>Chat (Coming soon)</a>
-                        </li>
-                        <li>
-                            <a href="/faq" className={cx('nav-link')}>FAQ</a>
-                        </li>
-                        <li>
-                            <a href="/" className={cx('nav-link')}>Contact</a>
-                        </li>
-                        <ul className={cx('nav-auth')}>
-                            {
-                                token ? <>
-                                    <li className={cx('nav-user-info')}>
-                                        <Tippy
-                                            content={profileMenuContent}
-                                            interactive={true}
-                                            placement='bottom'
-                                            theme="light"
-                                            animation="fade"
-                                            duration={100}
-                                            hideOnClick={true}
-                                            allowHTML={true}
-                                        >
-                                            <div className={cx('nav-avatar-container')}>
-                                                <img
-                                                    src={user?.avatar || '/default-avatar.png'}
-                                                    alt="User Avatar"
-                                                    className={cx('nav-avatar')}
-                                                />
+        <>
+            <header
+                id='header'
+                className={cx('header')}>
+                <div className={cx('header-container')}>
+                    <h1 className={cx('header-title')}>
+                        <a href="/" className={cx('header-link')}>UmaToe</a>
+                    </h1>
+                    <nav className={cx('header-nav')}>
+                        <ul className={cx('nav-list')}>
+                            <li>
+                                <button onClick={() => checkingNavigate('/uma-list')} className={cx('nav-link')}>Uma List</button>
+                            </li>
+                            <li>
+                                <button onClick={() => checkingNavigate('/')} className={cx('nav-link')}>Chat (Coming soon)</button>
+                            </li>
+                            <li>
+                                <button onClick={() => navigate('/faq')} className={cx('nav-link')}>FAQ</button>
+                            </li>
+                            <li>
+                                <button onClick={() => navigate('/contact')} className={cx('nav-link')}>Contact</button>
+                            </li>
+                            <ul className={cx('nav-auth')}>
+                                {
+                                    token ? <>
+                                        <li className={cx('nav-user-info')}>
+                                            <Tippy
+                                                content={profileMenuContent}
+                                                interactive={true}
+                                                placement='bottom'
+                                                theme="light"
+                                                animation="fade"
+                                                duration={100}
+                                                hideOnClick={true}
+                                                allowHTML={true}
+                                            >
+                                                <div className={cx('nav-avatar-container')}>
+                                                    <img
+                                                        src={user?.avatar || '/default-avatar.png'}
+                                                        alt="User Avatar"
+                                                        className={cx('nav-avatar')}
+                                                    />
 
-                                            </div>
-                                        </Tippy>
-                                    </li>
-                                </> : <>
-                                    <li>
-                                        <Button
-                                            className={cx('nav-link-btn')}
-                                            label='Log in'
-                                            onClick={() => { navigate('/auth/login'); }}
-                                        />
-                                    </li>
-                                    <li>
-                                        <Button
-                                            className={cx('nav-link-btn')}
-                                            primary
-                                            label='Sign up'
-                                            onClick={() => { navigate('/auth/signup'); }}
-                                        />
-                                    </li>
-                                </>
-                            }
+                                                </div>
+                                            </Tippy>
+                                        </li>
+                                    </> : <>
+                                        <li>
+                                            <Button
+                                                className={cx('nav-link-btn')}
+                                                label='Log in'
+                                                onClick={() => { navigate('/auth/login'); }}
+                                            />
+                                        </li>
+                                        <li>
+                                            <Button
+                                                className={cx('nav-link-btn')}
+                                                primary
+                                                label='Sign up'
+                                                onClick={() => { navigate('/auth/signup'); }}
+                                            />
+                                        </li>
+                                    </>
+                                }
+                            </ul>
                         </ul>
-                    </ul>
-                </nav>
-            </div>
-        </header>
+                    </nav>
+                </div>
+            </header>
+            <Modal
+                isOpen={showModal}
+                onClose={() => setShowModal(false)}
+                message="Please log in to access this feature."
+                navigatePath="/auth/login"
+                navigateLabel="Log in"
+                showCancel={true}
+            />
+        </>
     );
 }
 
