@@ -138,17 +138,10 @@ function Header() {
                                     </> : <>
                                         <li>
                                             <Button
+                                                primary
                                                 className={cx('nav-link-btn')}
                                                 label='Log in'
                                                 onClick={() => { navigate('/auth/login'); }}
-                                            />
-                                        </li>
-                                        <li>
-                                            <Button
-                                                className={cx('nav-link-btn')}
-                                                primary
-                                                label='Sign up'
-                                                onClick={() => { navigate('/auth/signup'); }}
                                             />
                                         </li>
                                     </>
