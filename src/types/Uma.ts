@@ -1,3 +1,7 @@
+export interface Dialogue {
+    triggers: string;
+    lines: string[];
+}
 export interface Uma {
     id: string;
     type?: string;
@@ -21,5 +25,6 @@ export interface Uma {
         status?: string;
         joinedDate?: string;
         introVideo?: string;
+        dialogues: Dialogue[];
     };
 }

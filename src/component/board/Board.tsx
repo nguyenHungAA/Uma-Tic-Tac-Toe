@@ -15,7 +15,7 @@ interface BoardProps {
 }
 
 let winner;
-export default function Board({ isXNext, squares, onPlay, currentPlayerName, nextPlayerName, isViewingHistory }:
+export default function Board({ isXNext, squares, onPlay, currentPlayerName, isViewingHistory }:
     BoardProps
 ) {
     const cx = classNames.bind(style);
@@ -135,26 +135,27 @@ export default function Board({ isXNext, squares, onPlay, currentPlayerName, nex
     if (winner !== null) {
         status = `Winner ${winner}`
     } else {
-        status = `Next player: ${nextPlayerName !== 'Human' ? nextPlayerName : "Human"}`
+        status = `Current Player: ${currentPlayerName}`
     }
+
 
     return <>
         <div className={cx('status')}>{status}</div>
         <div className={cx('board')}>
             <div className={cx('board-row')}>
-                <Square id={0} value={squares[0]} onSquareClick={() => handleSquareClick(0)} disabled={(nextPlayerName !== currentPlayerName) || isViewingHistory} />
-                <Square id={1} value={squares[1]} onSquareClick={() => handleSquareClick(1)} disabled={(nextPlayerName !== currentPlayerName) || isViewingHistory} />
-                <Square id={2} value={squares[2]} onSquareClick={() => handleSquareClick(2)} disabled={(nextPlayerName !== currentPlayerName) || isViewingHistory} />
+                <Square id={0} value={squares[0]} onSquareClick={() => handleSquareClick(0)} disabled={!isXNext || isViewingHistory} />
+                <Square id={1} value={squares[1]} onSquareClick={() => handleSquareClick(1)} disabled={!isXNext || isViewingHistory} />
+                <Square id={2} value={squares[2]} onSquareClick={() => handleSquareClick(2)} disabled={!isXNext || isViewingHistory} />
             </div>
             <div className={cx('board-row')}>
-                <Square id={3} value={squares[3]} onSquareClick={() => handleSquareClick(3)} disabled={(nextPlayerName !== currentPlayerName) || isViewingHistory} />
-                <Square id={4} value={squares[4]} onSquareClick={() => handleSquareClick(4)} disabled={(nextPlayerName !== currentPlayerName) || isViewingHistory} />
-                <Square id={5} value={squares[5]} onSquareClick={() => handleSquareClick(5)} disabled={(nextPlayerName !== currentPlayerName) || isViewingHistory} />
+                <Square id={3} value={squares[3]} onSquareClick={() => handleSquareClick(3)} disabled={!isXNext || isViewingHistory} />
+                <Square id={4} value={squares[4]} onSquareClick={() => handleSquareClick(4)} disabled={!isXNext || isViewingHistory} />
+                <Square id={5} value={squares[5]} onSquareClick={() => handleSquareClick(5)} disabled={!isXNext || isViewingHistory} />
             </div>
             <div className={cx('board-row')}>
-                <Square id={6} value={squares[6]} onSquareClick={() => handleSquareClick(6)} disabled={(nextPlayerName !== currentPlayerName) || isViewingHistory} />
-                <Square id={7} value={squares[7]} onSquareClick={() => handleSquareClick(7)} disabled={(nextPlayerName !== currentPlayerName) || isViewingHistory} />
-                <Square id={8} value={squares[8]} onSquareClick={() => handleSquareClick(8)} disabled={(nextPlayerName !== currentPlayerName) || isViewingHistory} />
+                <Square id={6} value={squares[6]} onSquareClick={() => handleSquareClick(6)} disabled={!isXNext || isViewingHistory} />
+                <Square id={7} value={squares[7]} onSquareClick={() => handleSquareClick(7)} disabled={!isXNext || isViewingHistory} />
+                <Square id={8} value={squares[8]} onSquareClick={() => handleSquareClick(8)} disabled={!isXNext || isViewingHistory} />
             </div>
         </div>
     </>
