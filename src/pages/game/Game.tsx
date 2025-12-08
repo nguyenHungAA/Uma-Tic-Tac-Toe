@@ -14,19 +14,16 @@ function Game() {
     const { id } = useParams();
     const navigate = useNavigate();
 
-    // Game state
     const [history, setHistory] = useState([Array(9).fill(null)]);
     const [currentMove, setCurrentMove] = useState(0);
     const [xMoves, setXMoves] = useState<number[]>([]);
     const [oMoves, setOMoves] = useState<number[]>([]);
     const [updateWinner, setUpdateWinner] = useState<string | null>(null);
 
-    // UI state
     const [showMoreMoves, setShowMoreMoves] = useState(false);
     const [isViewingHistory, setIsViewingHistory] = useState(false);
     const [umaMessage, setUmaMessage] = useState<string>("");
 
-    // Refs for tracking game progress
     const totalMovesPlayed = useRef(0);
     const lastMessageTrigger = useRef<string>('');
 
@@ -42,7 +39,6 @@ function Game() {
         }
     }, [id, navigate]);
 
-    // Uma message system
     useEffect(() => {
         if (!data?.data[0]?.attributes?.dialouges) return;
 
@@ -58,29 +54,43 @@ function Game() {
         };
 
         const determineMessageTrigger = (): string => {
-            // Game start - only show once at the beginning
+
+            if (updateWinner) {
+                if (updateWinner === 'Tie') {
+                    return 'gameTie';
+                } else if (updateWinner === 'X') {
+                    return 'botLose';
+                } else if (updateWinner === 'O') {
+                    return 'botWin';
+                }
+            }
+
             if (totalMoves === 0 && totalMovesPlayed.current === 0) {
                 return 'gameStart';
             }
 
-            // Very long game (prioritize over long game)
             if (totalMovesPlayed.current > 10) {
                 return 'veryLongGamePlay';
             }
 
-            // Long game
             if (totalMovesPlayed.current > 5) {
                 return 'longGamePlay';
             }
 
-            // Both players have made multiple moves (conversation phase)
-            if (xMoves.length >= 3 && oMoves.length >= 3) {
+            if (xMoves.length >= 3 && oMoves.length >= 3 && updateWinner !== null) {
                 return 'fillInConversation';
             }
 
-            // Bot's first move response
             if (xMoves.length === 1 && oMoves.length === 0) {
                 return 'botFirstPlay';
+            }
+
+            if (updateWinner === user.firstName) {
+                return 'botLose';
+            }
+
+            if (updateWinner === data.data[0].attributes.name) {
+                return 'botWin';
             }
 
             return '';
@@ -88,22 +98,19 @@ function Game() {
 
         const trigger = determineMessageTrigger();
 
-        // Only update message if we have a new trigger or it's gameStart
         if (trigger && (trigger !== lastMessageTrigger.current || trigger === 'gameStart')) {
             const message = getRandomDialogue(trigger);
             if (message) {
                 setUmaMessage(message);
                 lastMessageTrigger.current = trigger;
 
-                // Only increment counter for actual gameplay moves (not gameStart)
                 if (trigger !== 'gameStart') {
                     totalMovesPlayed.current += 1;
                 }
             }
         }
-    }, [xMoves, oMoves, data]);
+    }, [xMoves, oMoves, data, updateWinner]);
 
-    // Loading and error states
     if (isLoading) return <Loading />;
 
     if (error) {
@@ -122,7 +129,6 @@ function Game() {
 
     const umaData = data.data[0].attributes;
 
-    // Game actions
     const handleRestartGame = () => {
         setHistory([Array(9).fill(null)]);
         setCurrentMove(0);
@@ -132,27 +138,29 @@ function Game() {
         setIsViewingHistory(false);
         setShowMoreMoves(false);
 
-        // Reset message tracking
         totalMovesPlayed.current = 0;
         lastMessageTrigger.current = '';
         setUmaMessage('');
     };
 
+    const handleWinner = (winner: string | null) => {
+        if (winner && winner !== updateWinner) {
+            setUpdateWinner(winner);
+        }
+    };
+
     const handlePlay = (newSquares: Array<string | null>) => {
-        // Find the newly played square
         const playedIndex = newSquares.findIndex((square, index) =>
             square !== currentSquares[index] && square !== null
         );
 
         if (playedIndex === -1) return;
 
-        // Update current player's moves
         const currentPlayerMoves = isXNext ? [...xMoves] : [...oMoves];
         currentPlayerMoves.push(playedIndex);
 
         const updatedSquares = [...newSquares];
 
-        // Remove oldest move if player exceeds 3 moves
         if (currentPlayerMoves.length > 3) {
             const oldestMoveIndex = currentPlayerMoves.shift();
             if (oldestMoveIndex !== undefined) {
@@ -160,7 +168,6 @@ function Game() {
             }
         }
 
-        // Update state
         if (isXNext) {
             setXMoves(currentPlayerMoves);
         } else {
@@ -181,7 +188,6 @@ function Game() {
             setXMoves([]);
             setOMoves([]);
         } else {
-            // Reconstruct moves from history up to the selected move
             const newXMoves: number[] = [];
             const newOMoves: number[] = [];
 
@@ -197,7 +203,6 @@ function Game() {
                     const playerMoves = (i - 1) % 2 === 0 ? newXMoves : newOMoves;
                     playerMoves.push(playedIndex);
 
-                    // Maintain max 3 moves per player
                     if (playerMoves.length > 3) {
                         playerMoves.shift();
                     }
@@ -209,7 +214,6 @@ function Game() {
         }
     };
 
-    // Move list rendering
     const moves = history.slice(1).map((_, index) => {
         const move = index + 1;
         return (
@@ -256,7 +260,9 @@ function Game() {
                 <div className={cx('uma-text')}>
                     <h2>{umaData.name}</h2>
                     <h3>{umaData.title}</h3>
-                    <p className={cx('uma-message')}>{umaMessage}</p>
+                    <p
+                        style={{ background: umaData.themeColor }}
+                        className={cx('uma-message')}>{umaMessage}</p>
                 </div>
             </div>
 
@@ -267,6 +273,7 @@ function Game() {
                         isViewingHistory={isViewingHistory}
                         squares={currentSquares}
                         onPlay={handlePlay}
+                        onWinnerChange={handleWinner}
                         currentPlayerName={isXNext ? user.firstName : umaData.name}
                         nextPlayerName={isXNext ? umaData.name : user.firstName}
                     />

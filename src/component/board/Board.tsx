@@ -1,6 +1,5 @@
-
 import classNames from 'classnames/bind';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import Square from '../square/Square';
 
 import style from './Board.module.scss';
@@ -9,43 +8,70 @@ interface BoardProps {
     isXNext: boolean;
     isViewingHistory?: boolean;
     squares: Array<string | null>;
+    onWinnerChange?: (winner: string | null) => void;
     onPlay: (squares: Array<string | null>) => void;
     currentPlayerName?: string;
     nextPlayerName?: string;
 }
 
 let winner;
-export default function Board({ isXNext, squares, onPlay, currentPlayerName, isViewingHistory }:
+export default function Board({ isXNext, squares, onPlay, currentPlayerName, nextPlayerName, isViewingHistory, onWinnerChange }:
     BoardProps
 ) {
     const cx = classNames.bind(style);
 
-    useEffect(() => {
-        if (!isXNext && !calculateWinner(squares) && squares.includes(null)) {
-            const timer = setTimeout(() => {
-                makeAIMove();
-            }, 2000);
-
-            return () => clearTimeout(timer);
+    // Move calculateWinner outside or use useCallback
+    const calculateWinner = useCallback((squares: Array<string | null>) => {
+        const lines = [
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6]
+        ];
+        for (let i = 0; i < lines.length; i++) {
+            const [a, b, c] = lines[i];
+            if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+                return squares[a];
+            }
         }
-    }, [isXNext, squares]);
+        let counter = 0;
 
+        for (let i = 0; i < lines.length; i++) {
+            const [a, b, c] = lines[i];
+            if (squares[a] && squares[b] && squares[c]) {
+                counter++;
+            }
+        }
+        return counter === lines.length ? 'Tie' : null;
+    }, []);
 
-    function makeAIMove() {
+    const handleSquareClick = useCallback((index: number) => {
         if (isViewingHistory) {
             return;
         }
-        const availableMoves = squares
-            .map((square, index) => square === null ? index : null)
-            .filter(index => index !== null) as number[];
 
-        if (availableMoves.length > 0) {
-            const bestMove = getBestMove(squares, availableMoves);
-            handleSquareClick(bestMove);
+        try {
+            if (squares[index] || calculateWinner(squares)) {
+                return;
+            }
+
+            const newSquares = squares.slice();
+            if (isXNext) {
+                newSquares[index] = 'X';
+            } else {
+                newSquares[index] = 'O';
+            }
+            onPlay(newSquares);
+        } catch (error) {
+            console.error('Error handling square click:', error);
         }
-    }
+    }, [isViewingHistory, squares, isXNext, onPlay, calculateWinner]);
 
-    function getBestMove(currentSquares: Array<string | null>, availableMoves: number[]): number {
+    const getBestMove = useCallback((currentSquares: Array<string | null>, availableMoves: number[]): number => {
         if (isViewingHistory) {
             return -1;
         }
@@ -77,67 +103,47 @@ export default function Board({ isXNext, squares, onPlay, currentPlayerName, isV
         }
 
         return availableMoves[Math.floor(Math.random() * availableMoves.length)];
-    }
+    }, [isViewingHistory, calculateWinner]);
 
-    function handleSquareClick(index: number) {
+    const makeAIMove = useCallback(() => {
         if (isViewingHistory) {
             return;
         }
+        const availableMoves = squares
+            .map((square, index) => square === null ? index : null)
+            .filter(index => index !== null) as number[];
 
-        try {
-            if (squares[index] || calculateWinner(squares)) {
-                return;
-            }
-
-            const newSquares = squares.slice();
-            if (isXNext) {
-                newSquares[index] = 'X';
-            } else {
-                newSquares[index] = 'O';
-            }
-            onPlay(newSquares);
-        } catch (error) {
-            console.error('Error handling square click:', error);
+        if (availableMoves.length > 0) {
+            const bestMove = getBestMove(squares, availableMoves);
+            handleSquareClick(bestMove);
         }
-    }
+    }, [isViewingHistory, squares, getBestMove, handleSquareClick]);
 
-    function calculateWinner(squares: Array<string | null>) {
-        const lines = [
-            [0, 1, 2],
-            [3, 4, 5],
-            [6, 7, 8],
-            [0, 3, 6],
-            [1, 4, 7],
-            [2, 5, 8],
-            [0, 4, 8],
-            [2, 4, 6]
-        ];
-        for (let i = 0; i < lines.length; i++) {
-            const [a, b, c] = lines[i];
-            if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-                return squares[a];
-            }
-        }
-        let counter = 0;
+    useEffect(() => {
+        if (!isXNext && !calculateWinner(squares) && squares.includes(null)) {
+            const timer = setTimeout(() => {
+                makeAIMove();
+            }, 2000);
 
-        for (let i = 0; i < lines.length; i++) {
-            const [a, b, c] = lines[i];
-            if (squares[a] && squares[b] && squares[c]) {
-                counter++;
-            }
+            return () => clearTimeout(timer);
         }
-        return counter === lines.length ? 'Tie' : null;
-    }
+    }, [isXNext, makeAIMove, squares, calculateWinner]);
+
+    useEffect(() => {
+        const winner = calculateWinner(squares);
+        if (onWinnerChange) {
+            onWinnerChange(winner);
+        }
+    }, [squares, onWinnerChange, calculateWinner]);
 
     winner = calculateWinner(squares);
 
     let status;
     if (winner !== null) {
-        status = `Winner ${winner}`
+        status = `Winner: ${nextPlayerName}`
     } else {
         status = `Current Player: ${currentPlayerName}`
     }
-
 
     return <>
         <div className={cx('status')}>{status}</div>
