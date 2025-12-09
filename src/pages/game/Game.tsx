@@ -231,7 +231,7 @@ function Game() {
         }
 
         if (moves.length > 3) {
-            const visibleMoves = showMoreMoves ? moves : moves.slice(-3);
+            const visibleMoves = showMoreMoves ? moves : moves.slice(0, 3);
             return (
                 <>
                     {visibleMoves}
@@ -281,14 +281,20 @@ function Game() {
 
                 <div className={cx('game-info')}>
                     <div>
-                        {currentMove > 0 && (
-                            <div style={{ display: 'flex' }}>
-                                <button onClick={() => jumpTo(0)}>
-                                    Go to Game Start
-                                </button>
-                                <button onClick={() => jumpTo(history.length - 1)}>
-                                    Go to Latest Move
-                                </button>
+                        {(isViewingHistory || currentMove > 0) && (
+                            <div style={{ display: 'flex', gap: '16px', marginBottom: '32px' }}>
+                                <Button
+                                    primary
+                                    label='Go to Game Start'
+                                    onClick={() => jumpTo(0)}
+                                    className={cx('game-button')}
+
+                                />
+                                <Button
+                                    label='Go to Latest Move'
+                                    onClick={() => jumpTo(history.length - 1)}
+                                    className={cx('game-button')}
+                                />
                             </div>
                         )}
 
